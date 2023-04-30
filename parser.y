@@ -9,12 +9,14 @@
     %}
 
 
+    %union 
+    {
+        int intValue;
+        double floatValue;
+        char charValue;
+        _Bool boolValue;
+    }
 
-    /* values */
-    %token CHARACTER FLOATNUM TRUE FALSE
- 
-
-    %token NUMBER
     /* printf and scanf*/
     %token  PRINTFF SCANFF
 
@@ -49,29 +51,69 @@
     %token INCLUDE
 
     %token END
-
     
+    /* values */
+    %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL
 
  
     %%     
    
 
-    program: declarations
-             | program declarations
+    program: statement
+             | program statement
              ;
 
-    declarations: function_declaration
-             | variable_declaration
-             | enum_declaration
-             ; 
+    statement:    assignment_statement
+                | if_statement
+                | switch_statement
+                | iteration_statement
+                | function_call_statement
+                | CONTINUE SEMICOLON
+                | BREAK SEMICOLON
+                | expression SEMICOLON
+                | RETURN expression SEMICOLON
+                | SEMICOLON
+                | function_declaration
+                | variable_declaration
+                | enum_declaration
+                ;
+
+    block_statement: LCURLY statement_list RCURLY
+                    | LCURLY RCURLY
+                    ;
+
+    statement_list:   statement
+                    | statement_list statement
+                    ;   
+
+    variable_declaration: data_type variable_list SEMICOLON     
+                        ;
+
+    variable_list: variable
+                  | variable_list COMMA variable
+                  ;
+
+    variable: IDENTIFIER
+           | IDENTIFIER ASSIGNOP expression   
+           ;
+
+    data_type:    INT
+                | FLOAT
+                | CHAR
+                | BOOL
+                | STRING
+                ;  
+
 
     enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON
                     ;
+
     enum_values: IDENTIFIER
-             | IDENTIFIER ASSIGNOP NUMBER
+             | IDENTIFIER ASSIGNOP literal
              | enum_values COMMA IDENTIFIER
-             | enum_values COMMA IDENTIFIER ASSIGNOP NUMBER                         
-             ;          
+             | enum_values COMMA IDENTIFIER ASSIGNOP literal                         
+             ; 
+
     function_declaration: function_siganture function_body
                         ;
 
@@ -79,45 +121,121 @@
                       ;
 
 
-    function_body: LCURLY variable_declaration_list statement_list RCURLY
+    function_body: LCURLY block_statement RCURLY
                 ;
     
     parameter_list: VOID
                   | parameter_declaration
                   | parameter_declaration COMMA parameter_list
                   ;
+
     parameter_declaration: data_type IDENTIFIER
                           ;
+
+
+    variable_declaration_list:    variable_declaration
+                                | variable_declaration_list variable_declaration
+                                ;
+
+
+
     
-    variable_declaration: data_type variable_list SEMICOLON     
+    if_statement: matched_if_statement
+                | unmatched_if_statement
+                ;
+
+    matched_if_statement: IF LPAREN expression RPAREN matched_if_statement ELSE matched_if_statement
+                        | block_statement
                         ;
-    variable_list: variable
-                  | variable_list COMMA variable
-    variable: IDENTIFIER
-           | IDENTIFIER ASSIGNOP expression   
-           ;
-    data_type: INT
-             | FLOAT
-             | CHAR
-             | BOOL
-             | STRING
-             ;   
-    statement : assignment_statement
-          | if_statement
-          | while_statement
-          | for_statement
-          | repeat_until_statement
-          | switch_statement
-          | function_call_statement
-          | block_statement
-          | CONTINUE SEMICOLON
-          | BREAK SEMICOLON
-          | RETURN expression SEMICOLON
-          | SEMICOLON
-          ;
-    assignment_statement : variable ASSIGNOP expression SEMICOLON
-                     ;     
-                             
+
+    unmatched_if_statement: IF LPAREN expression RPAREN block_statement
+                            | IF LPAREN expression RPAREN matched_if_statement ELSE unmatched_if_statement
+                            ;
+
+    switch_statement: SWITCH LPAREN expression RPAREN LCURLY case_list RCURLY
+                    | SWITCH LPAREN expression RPAREN LCURLY case_list default_statement RCURLY
+                    ;
+
+    default_statement: DEFAULT COLON statement_list
+                    | DEFAULT COLON
+                    ;
+
+    case_list: case_statement
+            | case_list case_statement
+            ;
+
+    case_statement: CASE expression COLON statement_list
+                    | DEFAULT COLON statement_list
+                    ;
+
+    iteration_statement: WHILE LPAREN expression RPAREN block_statement
+                        | FOR LPAREN variable_declaration_list SEMICOLON expression SEMICOLON expression RPAREN block_statement 
+                        | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON
+                        ;
+
+    function_call_statement: IDENTIFIER LPAREN argument_list RPAREN SEMICOLON
+                            ;
+
+    expression         : expression COMMA assign_expression           
+                        | assign_expression
+                        ;  
+
+    assign_expression   : IDENTIFIER ASSIGNOP expression SEMICOLON             
+                        | logical_or_expression
+                        ;
+
+    logical_or_expression: logical_or_expression OR logical_and_expression    
+                        | logical_and_expression
+                        ;
+    
+    logical_and_expression: logical_and_expression AND equality_expression    
+                        | equality_expression
+                        ;
+
+    /* == */
+    equality_expression: equality_expression EQ relational_expression    
+                        | equality_expression NE relational_expression
+                        | relational_expression
+                        ;
+
+    relational_expression: relational_expression LT additive_expression    
+                        | relational_expression GT additive_expression
+                        | relational_expression LE additive_expression
+                        | relational_expression GE additive_expression
+                        | additive_expression
+                        ;
+
+    additive_expression: additive_expression PLUS multiplicative_expression    
+                        | additive_expression SUBTRACT multiplicative_expression
+                        | multiplicative_expression
+                        ;
+    
+    multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression
+                                | multiplicative_expression DIVIDE prefix_expression
+                                | prefix_expression
+                                ;
+
+    prefix_expression: UNARYADD prefix_expression
+                    | UNARYSUB prefix_expression
+                    | postfix_expression
+                    ;
+    
+    postfix_expression: postfix_expression UNARYADD
+                        | postfix_expression UNARYSUB
+                        | primary_expression
+                        ;
+
+    primary_expression: IDENTIFIER
+                        | literals
+
+    literal                 : FALSE                             
+                            | TRUE                             
+                            | INT_LITERAL                       
+                            | FLOAT_LITERAL                     
+                            | CHAR_LITERAL                      
+                            | STRING_LITERAL                    
+                            ;
+
     %%
     void yyerror(char *s) {
         printf(stderr, "Error: %s\n", s);
@@ -130,7 +248,7 @@
     }
 
     int main(void){
-       printf("enter an expressiom :");
+       printf("enter an expression :");
        yyparse();
        return 0;
     }
