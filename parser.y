@@ -63,12 +63,11 @@
              | program statement
              ;
 
-    statement:    assignment_statement
-                | if_statement
-                | switch_statement
-                | iteration_statement
-                | function_call_statement
-                | CONTINUE SEMICOLON
+    statement:    if_statement                              {printf("if statement match");}
+                | switch_statement                          {printf("switch match");}    
+                | iteration_statement                       {printf("itreration match");} 
+                | function_call_statement                   {printf("function_call_statement match");}
+                | CONTINUE SEMICOLON                        
                 | BREAK SEMICOLON
                 | expression SEMICOLON
                 | RETURN expression SEMICOLON
@@ -173,14 +172,14 @@
                         | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON
                         ;
 
-    function_call_statement: IDENTIFIER LPAREN argument_list RPAREN SEMICOLON
+    function_call_statement: IDENTIFIER LPAREN parameter_list RPAREN SEMICOLON
                             ;
 
     expression         : expression COMMA assign_expression           
                         | assign_expression
                         ;  
 
-    assign_expression   : IDENTIFIER ASSIGNOP expression SEMICOLON             
+    assign_expression   : IDENTIFIER ASSIGNOP expression              
                         | logical_or_expression
                         ;
 
@@ -226,14 +225,13 @@
                         ;
 
     primary_expression: IDENTIFIER
-                        | literals
+                        | literal
 
     literal                 : FALSE                             
                             | TRUE                             
                             | INT_LITERAL                       
                             | FLOAT_LITERAL                     
-                            | CHAR_LITERAL                      
-                            | STRING_LITERAL                    
+                            | CHARACTER_LITERAL                                          
                             ;
 
     %%
