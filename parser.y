@@ -152,20 +152,16 @@
                             ;
 
     switch_statement: SWITCH LPAREN expression RPAREN LCURLY case_list RCURLY
-                    | SWITCH LPAREN expression RPAREN LCURLY case_list default_statement RCURLY
-                    ;
+                
+    case_statement: CASE expression COLON statement_list ;
+    default_statement: DEFAULT COLON statement_list ;
 
-    default_statement: DEFAULT COLON statement_list
-                    | DEFAULT COLON
-                    ;
-
-    case_list: case_statement
-            | case_list case_statement
+    case_list: case_list case_statement
+            | case_list default_statement
+            | case_statement
+            | default_statement
             ;
 
-    case_statement: CASE expression COLON statement_list
-                    | DEFAULT COLON statement_list
-                    ;
 
     iteration_statement: WHILE LPAREN expression RPAREN block_statement
                         | FOR LPAREN variable_declaration_list SEMICOLON expression SEMICOLON expression RPAREN block_statement 
@@ -175,9 +171,8 @@
     function_call_statement: IDENTIFIER LPAREN parameter_list RPAREN SEMICOLON
                             ;
 
-    expression         : expression COMMA assign_expression           
-                        | assign_expression
-                        ;  
+    expression: assign_expression | expression COMMA expression ;
+
 
     assign_expression   : IDENTIFIER ASSIGNOP expression              
                         | logical_or_expression
