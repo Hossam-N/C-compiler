@@ -36,7 +36,7 @@
     /* assignment operator =  */
     %token ASSIGNOP
 
-    %token SEMICOLON COLON 
+    %token SEMICOLON COLON COMMA
 
     %token LCURLY RCURLY LPAREN RPAREN 
 
@@ -50,15 +50,75 @@
 
     %token END
 
-    %start root
+    
 
-
+ 
     %%     
-    root: expr { printf("result = %d\n", $$); return 0; }
-    expr:  expr PLUS NUMBER      {printf("dakhalt aho"); $$=$1+$3}
-         |NUMBER               {$$ = $1;}
-    %%
+   
 
+    program: declarations
+             | program declarations
+             ;
+
+    declarations: function_declaration
+             | variable_declaration
+             | enum_declaration
+             ; 
+
+    enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON
+                    ;
+    enum_values: IDENTIFIER
+             | IDENTIFIER ASSIGNOP NUMBER
+             | enum_values COMMA IDENTIFIER
+             | enum_values COMMA IDENTIFIER ASSIGNOP NUMBER                         
+             ;          
+    function_declaration: function_siganture function_body
+                        ;
+
+    function_siganture: data_type IDENTIFIER LPAREN parameter_list RPAREN
+                      ;
+
+
+    function_body: LCURLY variable_declaration_list statement_list RCURLY
+                ;
+    
+    parameter_list: VOID
+                  | parameter_declaration
+                  | parameter_declaration COMMA parameter_list
+                  ;
+    parameter_declaration: data_type IDENTIFIER
+                          ;
+    
+    variable_declaration: data_type variable_list SEMICOLON     
+                        ;
+    variable_list: variable
+                  | variable_list COMMA variable
+    variable: IDENTIFIER
+           | IDENTIFIER ASSIGNOP expression   
+           ;
+    data_type: INT
+             | FLOAT
+             | CHAR
+             | BOOL
+             | STRING
+             ;   
+    statement : assignment_statement
+          | if_statement
+          | while_statement
+          | for_statement
+          | repeat_until_statement
+          | switch_statement
+          | function_call_statement
+          | block_statement
+          | CONTINUE SEMICOLON
+          | BREAK SEMICOLON
+          | RETURN expression SEMICOLON
+          | SEMICOLON
+          ;
+    assignment_statement : variable ASSIGNOP expression SEMICOLON
+                     ;     
+                             
+    %%
     void yyerror(char *s) {
         printf(stderr, "Error: %s\n", s);
     }
