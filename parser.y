@@ -51,6 +51,7 @@
     %token INCLUDE
 
     %token END
+
     
     /* values */
     %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL
@@ -93,7 +94,7 @@
                   ;
 
     variable: IDENTIFIER
-           | IDENTIFIER ASSIGNOP expression   
+           | IDENTIFIER ASSIGNOP assign_expression   
            ;
 
     data_type:    INT
@@ -170,11 +171,12 @@
 
     function_call_statement: IDENTIFIER LPAREN parameter_list RPAREN SEMICOLON
                             ;
+    
+    expression:  expression COMMA assign_expression
+                | assign_expression 
+                ;
 
-    expression: assign_expression | expression COMMA expression ;
-
-
-    assign_expression   : IDENTIFIER ASSIGNOP expression              
+    assign_expression   : IDENTIFIER ASSIGNOP assign_expression              
                         | logical_or_expression
                         ;
 
