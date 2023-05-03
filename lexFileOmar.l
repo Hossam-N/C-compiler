@@ -23,6 +23,10 @@ unary "++"|"--"
 "("                            {return LPAR}
 ")"                             {return RPAR}
 
+";"                             {return SEMICOLON}
+":"                             {return COLON}
+","                             {return COMMA}
+"="                             {return ASSIGNOP}
 
 [-]?{digit}+                {printf("%s %d \n",*yytext,yylval); yylval = atoi(yytext);return INTVAL} //return INTVAL; 
 [-]?{digit}+\.{digit}{1,8}  {yylval = atof(yytext); return FLOATVAL; }  //PREcision of the float is 3 digits after the decimal point
@@ -36,6 +40,7 @@ unary "++"|"--"
 
 ["].*["]                    { return STR; }
 
+
 "string"                    {return STRING}
 "int"                       { return INT; }
 "float"                     { return FLOAT; }
@@ -48,6 +53,7 @@ unary "++"|"--"
 ^"#include"[ ]*<.+\.h>      { return INCLUDE; }
 "true"                      { return TRUE; }  // BOOLEAN VALUES
 "false"                     { return FALSE; }  // if wrong means false
+
 
 {unary}                     { return UNARY; }
 "<="                        { return LE; }
