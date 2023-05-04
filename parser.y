@@ -18,13 +18,13 @@
     }
 
     /* printf and scanf*/
-    %token  PRINTFF SCANFF
+    %token  PRINTF SCANF
 
     /* datatypes */
-    %token  INT FLOAT CHAR BOOL STRING VOID
+    %token  INT FLOAT CHAR BOOL STRING VOID CONST
 
     /* Body */
-    %token  FOR IF ELSE SWITCH WHILE DO CASE CONTINUE BREAK DEFAULT 
+    %token  FOR IF ELSE SWITCH WHILE DO CASE CONTINUE BREAK DEFAULT REPEAT UNTIL
 
     /* Binary Operators */
     %token PLUS MULTIPLY DIVIDE SUBTRACT  
