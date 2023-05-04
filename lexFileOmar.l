@@ -1,8 +1,10 @@
 %{
     //#include "y.tab.h"
+    #include "parser.tab.h"
     #include <stdio.h>
     int countn=0;
 %}
+
 
 %option yylineno
 
@@ -12,81 +14,74 @@ unary "++"|"--"
 
 
 %%
-"printf"                    { printf("%s",*yytext);return PRINT; }  //print output
-"scanf"                     { return SCAN; }  //scan input
-{alpha}({alpha}|{digit}|_)*   { return IDENTIFIER; }  //identifier starts with any letter not symbol or digti then
-\/\/.*\\n                   {return COMMENT;}  //single line comment and ends with carriage return
+"printf"                    { printf("print"); r}  //print output
+"scanf"                     {  printf("scan");}  //scan input
+"enum"                      {printf("enum matched");}
+"string"                    {printf("string matched");}
+"int"                       { printf("int matched"); }
+"float"                     { printf("float matched"); }
+"char"                      { printf("char matched"); }
+"void"                      { printf("void matched"); }
+"return"                    { printf("return matched"); }
+"if"	                    { printf("if matched"); }
+"else"	                    { printf("else matched"); }
+"switch"                    {printf("switch matched");}
+"default"                   {printf("default matched");}
+"case"                      {printf("case matched");}
 
-"{"                         {return LCURLY;}
-"}"                          {return RCURLY;}
+"true"                      { printf("true matched"); }  // BOOLEAN VALUES
+"false"                     { printf("false matched"); }  // if wrong means false
+"for"	                    { printf("for matched"); }
+"while"                     {printf("while matched");}
+"repeat"                    {printf("repeat matched");}
+"until"                     {printf("until matched");}
+"do"                        {printf("do matched");}
+"++"                        { printf("++ matched"); }
+"--"                        { printf("-- matched"); }
+"<="                        { printf("<= matched"); }
+">="                        {printf(">= matched"); }
+"=="                        { printf("== matched");}
+"!="                        { printf("!= matched"); }
+">"	                    { printf("> matched");}
+"<"	                    { printf("< matched"); }
+"&&"	                    { printf("&& matched"); }
+"||"	                    { printf("|| matched"); }
+"+"                         { printf("+ matched"); }
+"-"                         {printf("- matched"); }
+"/"                         {printf("/ matched"); }
+"*"                         { printf("* matched"); }
 
-"("                            {return LPAR;}
-")"                             {return RPAR;}
+"{"                         {printf("{ matched");}
+"}"                          {printf("} matched");}
 
-";"                             {return SEMICOLON;}
-":"                             {return COLON;}
-","                             {return COMMA;}
-"="                             {return ASSIGNOP;}
+"("                            {printf("( matched");}
+")"                             {printf(") matched");}
 
-[-]?{digit}+                {printf("%s %d \n",*yytext,yylval); yylval = atoi(yytext);return INTVAL} //return INTVAL; 
-[-]?{digit}+\.{digit}{1,8}  {yylval = atof(yytext); return FLOATVAL; }  //PREcision of the float is 3 digits after the decimal point
-['].[']                     { yylval  = char(yyltext);return CHARACTERVAL; }
+";"                             {printf("; matched");}
+":"                             {printf(": matched");}
+","                             {printf(", matched");}
+"="                             {printf("= matched");}
 
-\/\/.*                      { ; }  // if you want to do nothing feed ; and donot return any value
-\/\*(.*\n)*.*\*\/           { ; } 
+{alpha}({alpha}|{digit}|_)*   {printf("Identifier matched"); }  //identifier starts with any letter not symbol or digti then
+[-]?{digit}+                {printf("number matched");} //return INTVAL; 
+[-]?{digit}+\.{digit}{1,8}  {printf("float matched");}  //PREcision of the float is 3 digits after the decimal point
+['][a-zA-z]?[']             { printf("char matched"); }
+
+
 
 [ \t]+                      { ; }  // ignore whitespaces
 [\n]                        { countn++; }
-.	                    { return *yytext; }
-
-["].*["]                    { return STR; }
-
-"const"                     {return CONSTANT;}
-"enum"                      {return ENUM;}
-"string"                    {return STRING}
-"int"                       { return INT; }
-"float"                     { return FLOAT; }
-"char"                      { return CHAR; }
-"void"                      { return VOID; }
-"return"                    { return RETURN; }
-/* conditional statement */
-"if"	                    { return IF; }
-"else"	                    { return ELSE; }
-"switch"                    {return SWITCH;}
-"default"                   {return DEFAULT;}
-"case"                      {return CASE;}
-^"#include"[ ]*<.+\.h>      { return INCLUDE; }
-"true"                      { return TRUE; }  // BOOLEAN VALUES
-"false"                     { return FALSE; }  // if wrong means false
-/*  loop statements */
-"for"	                    { return FOR; }
-"while"                     { return WHILE;}
-"repeat"                    {return REPEAT;}
-"until"                     {return UNTIL;}
-"do"                        {return DO;}
-
-""
-{unary}                     { return UNARY; }
-"<="                        { return LE; }
-">="                        { return GE; }
-"=="                        { return EQ; }
-"!="                        { return NE; }
-">"	                    { return GT; }
-"<"	                    { return LT; }
-"&&"	                    { return AND; }
-"||"	                    { return OR; }
-"+"                         { return ADD; }
-"-"                         { return SUBTRACT; }
-"/"                         { return DIVIDE; }
-"*"                         { return MULTIPLY; }
+                            
 
 %%
 
-int yywrap() {
-    return 1;
-}
+    int yywrap(){
+        return 1;
+    }
 
-// int main(){
-//     yylex();
-//     return 0;
-// }
+
+
+    int main(){
+        yylex();
+        return 0;
+    }

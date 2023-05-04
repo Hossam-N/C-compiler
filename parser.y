@@ -8,6 +8,8 @@
         void yyerror(char *s);
     %}
 
+    
+
 
     %union 
     {
@@ -60,7 +62,7 @@
     %%     
    
 
-    program: statement
+    program: statement                                      {printf("entered program");}
              | program statement
              ;
 
@@ -238,14 +240,14 @@
 
 
     int yywrap(){
-
         return 1;
     }
-
+    
     int main(void){
-       printf("enter an expression :");
-       yyparse();
-       return 0;
+        yyparse();
+        return 0;
     }
+   
+
 
 
