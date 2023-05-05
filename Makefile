@@ -1,13 +1,7 @@
-CC=gcc
 
-all: parser
+compiler:
+	flex lexFileOmar.l 
+	bison -vd parser.y
+	gcc lex.yy.c parser.tab.c -o compiler 
 
-parser: lex.yy.c yaccfile.tab.c
-	$(CC) $(CFLAGS) -o parser lex.yy.c $(yacc).tab.c
-
-lex.yy.c: $(lex)
-	flex $(lex)
-
-yaccfile.tab.c: $(yacc)
-	bison -d $(yacc)
 

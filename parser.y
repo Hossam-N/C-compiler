@@ -4,8 +4,9 @@
         #include<string.h>
         #include<stdlib.h>
         #include<ctype.h>
+        extern FILE* yyin;
         
-        void yyerror(char *s);
+        int yyerror(char *s);
     %}
 
     
@@ -53,30 +54,31 @@
     %token INCLUDE
 
     %token END
-
+    %start program
     
     /* values */
     %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL
 
  
     %%     
-   
 
-    program: statement                                      {printf("entered program");}
+
+    program: statement                                      {printf("entered program\n");}
              | program statement
+             | error SEMICOLON
              ;
 
-    statement:    if_statement                              {printf("if statement match");}
-                | switch_statement                          {printf("switch match");}    
-                | iteration_statement                       {printf("itreration match");} 
-                | function_call_statement                   {printf("function_call_statement match");}
+    statement:    if_statement                              {printf("if statement match\n");}
+                | switch_statement                          {printf("switch match\n");}    
+                | iteration_statement                       {printf("itreration match\n");} 
+                | function_call_statement                   {printf("function_call_statement match\n");}
                 | CONTINUE SEMICOLON                        
                 | BREAK SEMICOLON
-                | expression SEMICOLON
+                | expression SEMICOLON                       {printf("expression match\n");}
                 | RETURN expression SEMICOLON
                 | SEMICOLON
                 | function_declaration
-                | variable_declaration
+                | variable_declaration                        {printf("variable decalration\n");}
                 | enum_declaration
                 ;
 
@@ -130,12 +132,12 @@
                   | parameter_declaration
                   | parameter_declaration COMMA parameter_list
                   ;
-
+                
     parameter_declaration: data_type IDENTIFIER
                           ;
 
 
-    variable_declaration_list:    variable_declaration
+    variable_declaration_list:    variable_declaration           
                                 | variable_declaration_list variable_declaration
                                 ;
 
@@ -167,11 +169,11 @@
 
 
     iteration_statement: WHILE LPAREN expression RPAREN block_statement
-                        | FOR LPAREN variable_declaration_list SEMICOLON expression SEMICOLON expression RPAREN block_statement 
+                        | FOR LPAREN variable_declaration_list expression SEMICOLON expression RPAREN block_statement  
                         | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON
                         ;
 
-    function_call_statement: IDENTIFIER LPAREN parameter_list RPAREN SEMICOLON
+    function_call_statement: IDENTIFIER LPAREN expression RPAREN SEMICOLON
                             ;
     
     expression:  expression COMMA assign_expression
@@ -208,7 +210,7 @@
                         | multiplicative_expression
                         ;
     
-    multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression
+    multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression  
                                 | multiplicative_expression DIVIDE prefix_expression
                                 | prefix_expression
                                 ;
@@ -228,14 +230,15 @@
 
     literal                 : FALSE                             
                             | TRUE                             
-                            | INT_LITERAL                       
+                            | INT_LITERAL                         
                             | FLOAT_LITERAL                     
                             | CHARACTER_LITERAL                                          
                             ;
 
     %%
-    void yyerror(char *s) {
-        printf(stderr, "Error: %s\n", s);
+    int yyerror(char *s) {
+        printf("Error: %s\n", s);
+        return 0;
     }
 
 
@@ -244,8 +247,22 @@
     }
     
     int main(void){
-        yyparse();
-        return 0;
+       #ifdef YYDEBUG
+            yydebug = 1;
+        #endif 
+       FILE* input = fopen("inputfile.txt", "r"); // open input file
+       if (input == NULL) {
+        perror("Error opening input file");
+        return 1;
+       }
+
+       yyin = input; // use input file as input stream
+
+       yyparse(); // parse the input
+
+       fclose(input); // close the input file
+
+       return 0;
     }
    
 

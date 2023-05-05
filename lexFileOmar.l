@@ -14,58 +14,58 @@ unary "++"|"--"
 
 
 %%
-"printf"                    { printf("print"); return PRINTF;}  //print output
-"scanf"                     {  printf("scan"); return SCANF;}  //scan input
-"enum"                      {printf("enum matched"); return ENUM;}
-"string"                    {printf("string matched"); return STRING;}
-"int"                       { printf("int matched"); return INT;}
-"float"                     { printf("float matched"); return FLOAT; }
-"char"                      { printf("char matched"); return CHAR; }
-"void"                      { printf("void matched"); return VOID; }
-"return"                    { printf("return matched"); return RETURN; }
-"if"	                    { printf("if matched"); return IF; }
-"else"	                    { printf("else matched"); return ELSE; }
-"switch"                    {printf("switch matched"); return SWITCH;}
-"default"                   {printf("default matched"); return DEFAULT;}
-"case"                      {printf("case matched"); return CASE;}
+"printf"                    { /*printf("print");*/ return PRINTF;}  //print output
+"scanf"                     {  /*printf("print");*/ return SCANF;}  //scan input
+"enum"                      { /*printf("print");*/ return ENUM;}
+"string"                    {/*printf("print");*/ return STRING;}
+"int"                       { /*printf("print");*/ return INT;}
+"float"                     { /*printf("print");*/ return FLOAT; }
+"char"                      { /*printf("print");*/ return CHAR; }
+"void"                      { /*printf("print");*/ return VOID; }
+"return"                    { /*printf("print");*/ return RETURN; }
+"if"	                    { /*printf("print");*/ return IF; }
+"else"	                    { /*printf("print");*/ return ELSE; }
+"switch"                    { /*printf("print");*/ return SWITCH;}
+"default"                   { /*printf("print");*/ return DEFAULT;}
+"case"                      { /*printf("print");*/ return CASE;}
 
-"true"                      { printf("true matched"); return TRUE; }  // BOOLEAN VALUES
-"false"                     { printf("false matched"); return FALSE; }  // if wrong means false
-"for"	                    { printf("for matched"); return FOR; }
-"while"                     {printf("while matched"); return WHILE;}
-"repeat"                    {printf("repeat matched"); return REPEAT;}
-"until"                     {printf("until matched"); return UNTIL;}
-"do"                        {printf("do matched"); return DO;}
-"++"                        { printf("++ matched"); return UNARYADD; }
-"--"                        { printf("-- matched"); return UNARYSUB; }
-"<="                        { printf("<= matched"); return LE;}
-">="                        {printf(">= matched"); return GE;}
-"=="                        { printf("== matched"); return EQ;}
-"!="                        { printf("!= matched"); return NE;}
-">"	                    { printf("> matched"); return GT;}
-"<"	                    { printf("< matched"); return LT; }
-"&&"	                    { printf("&& matched");  return AND;}
-"||"	                    { printf("|| matched"); return OR; }
-"+"                         { printf("+ matched"); return PLUS; }
-"-"                         {printf("- matched"); return SUBTRACT; }
-"/"                         {printf("/ matched"); return DIVIDE; }
-"*"                         { printf("* matched"); return MULTIPLY; }
+"true"                      { /*printf("print");*/ return TRUE; }  // BOOLEAN VALUES
+"false"                     { /*printf("print");*/ return FALSE; }  // if wrong means false
+"for"	                    { /*printf("print");*/ return FOR; }
+"while"                     {/*printf("print");*/ return WHILE;}
+"repeat"                    {/*printf("print");*/ return REPEAT;}
+"until"                     {/*printf("print");*/ return UNTIL;}
+"do"                        {/*printf("print");*/ return DO;}
+"++"                        { /*printf("print");*/ return UNARYADD; }
+"--"                        { /*printf("print");*/ return UNARYSUB; }
+"<="                        { /*printf("print");*/ return LE;}
+">="                        {/*printf("print");*/ return GE;}
+"=="                        { /*printf("print");*/ return EQ;}
+"!="                        { /*printf("print");*/ return NE;}
+">"	                    { /*printf("print");*/ return GT;}
+"<"	                    { /*printf("print");*/ return LT; }
+"&&"	                    { /*printf("print");*/  return AND;}
+"||"	                    { /*printf("print");*/ return OR; }
+"+"                         { /*printf("print");*/ return PLUS; }
+"-"                         {/*printf("print");*/ return SUBTRACT; }
+"/"                         {/*printf("print");*/ return DIVIDE; }
+"*"                         { /*printf("print");*/ return MULTIPLY; }
 
-"{"                         {printf("{ matched"); return LCURLY;}
-"}"                          {printf("} matched"); return RCURLY;}
+"{"                         {/*printf("print");*/ return LCURLY;}
+"}"                          {/*printf("print");*/ return RCURLY;}
 
-"("                            {printf("( matched"); return LPAREN;}
-")"                             {printf(") matched"); return RPAREN;}
+"("                            {/*printf("print");*/ return LPAREN;}
+")"                             {/*printf("print");*/ return RPAREN;}
 
-";"                             {printf("; matched"); return SEMICOLON;}
-":"                             {printf(": matched"); return COLON;}
-","                             {printf(", matched"); return COMMA;}
-"="                             {printf("= matched"); return ASSIGNOP;}
+";"                             {/*printf("print");*/ return SEMICOLON;}
+":"                             {/*printf("print");*/ return COLON;}
+","                             {/*printf("print");*/ return COMMA;}
+"="                             {/*printf("print");*/ return ASSIGNOP;}
 
-{alpha}({alpha}|{digit}|_)*   {printf("Identifier matched"); return IDENTIFIER;}  //identifier starts with any letter not symbol or digti then
-[-]?{digit}+                {printf("number matched"); return INT_LITERAL;} //return INTVAL; 
-[-]?{digit}+\.{digit}{1,8}  {printf("float matched"); return FLOAT_LITERAL;}  //PREcision of the float is 3 digits after the decimal point
-['][a-zA-z]?[']             { printf("char matched"); return CHARACTER_LITERAL; }
+{alpha}({alpha}|{digit}|_)*   {/*printf("print");*/ return IDENTIFIER;}  //identifier starts with any letter not symbol or digti then
+[-]?{digit}+                {/*printf("print");*/ return INT_LITERAL;} //return INTVAL; 
+[-]?{digit}+\.{digit}{1,8}  {/*printf("print");*/ return FLOAT_LITERAL;}  //PREcision of the float is 3 digits after the decimal point
+['][a-zA-z]?[']             { /*printf("print");*/ return CHARACTER_LITERAL; }
 
 
 
@@ -75,13 +75,13 @@ unary "++"|"--"
 
 %%
 
-    int yywrap(){
-        return 1;
-    }
+    // int yywrap(){
+    //     return 1;
+    // }
 
 
 
-    int main(){
-        yylex();
-        return 0;
-    }
+    // int main(){
+    //     yylex();
+    //     return 0;
+    // }
