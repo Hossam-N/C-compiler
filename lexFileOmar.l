@@ -22,6 +22,7 @@ unary "++"|"--"
 "float"                     { /*printf("print");*/ return FLOAT; }
 "char"                      { /*printf("print");*/ return CHAR; }
 "void"                      { /*printf("print");*/ return VOID; }
+"const"                     { /*printf("print");*/ return CONST; }
 "return"                    { /*printf("print");*/ return RETURN; }
 "if"	                    { /*printf("print");*/ return IF; }
 "else"	                    { /*printf("print");*/ return ELSE; }

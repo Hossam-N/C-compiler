@@ -5,7 +5,7 @@
         #include<stdlib.h>
         #include<ctype.h>
         extern FILE* yyin;
-        
+        extern int yylineno;
         int yyerror(char *s);
     %}
 
@@ -57,7 +57,7 @@
     %start program
     
     /* values */
-    %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL
+    %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL 
 
  
     %%     
@@ -82,8 +82,8 @@
                 | enum_declaration                            {printf("enum declaration match\n");}   
                 ;
 
-    block_statement: LCURLY statement_list RCURLY           
-                    | LCURLY RCURLY                         {printf("block statement match\n");}
+    block_statement: LCURLY statement_list RCURLY           {printf("block statement match\n");}
+                    | LCURLY RCURLY                         
                     ;
 
     statement_list:   statement                             
@@ -91,6 +91,7 @@
                     ;   
 
     variable_declaration: data_type variable_list SEMICOLON      {printf("variable declaration match\n");}
+                        | CONST data_type variable_list SEMICOLON     {printf("constant variable declaration match\n");}
                         ;
 
     variable_list: variable
@@ -121,16 +122,20 @@
     function_declaration: function_siganture block_statement
                         ;
 
-    function_siganture: data_type IDENTIFIER LPAREN parameter_list RPAREN
+    function_siganture: function_data_type IDENTIFIER LPAREN parameter_list RPAREN
                       ;
     
-    parameter_list: VOID
+    function_data_type: data_type
+                        | VOID
+                        ;
+    parameter_list: 
                   | parameter_declaration
                   | parameter_declaration COMMA parameter_list
                   ;
                 
     parameter_declaration: data_type IDENTIFIER
-                          ;
+                        | CONST data_type IDENTIFIER
+                        ;
 
 
     variable_declaration_list:    variable_declaration           
@@ -140,7 +145,7 @@
 
 
     
-    if_statement: matched_if_statement                                              {printf("matched if statement match\n");  }          
+    if_statement: matched_if_statement                                                      
                 | unmatched_if_statement                                            {printf("unmatched if statement match\n");}
                 ;
 
@@ -172,7 +177,11 @@
                         | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON   {printf("do while statement match\n");}
                         ;
 
-    function_call_statement: IDENTIFIER LPAREN expression RPAREN SEMICOLON
+    function_call_statement: IDENTIFIER LPAREN function_call_expression RPAREN SEMICOLON
+                            ;
+    
+    function_call_expression: 
+                            | expression
                             ;
     
     expression:  expression COMMA assign_expression           
@@ -237,7 +246,7 @@
 
     %%
     int yyerror(char *s) {
-        printf("Error: %s\n", s);
+        printf("syntax error on line %d: %s\n", yylineno, s);
         return 0;
     }
 
