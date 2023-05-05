@@ -68,36 +68,36 @@
              | error SEMICOLON
              ;
 
-    statement:    if_statement                              {printf("if statement match\n");}
-                | switch_statement                          {printf("switch match\n");}    
+    statement:    if_statement                            
+                | switch_statement                             
                 | iteration_statement                       {printf("itreration match\n");} 
                 | function_call_statement                   {printf("function_call_statement match\n");}
                 | CONTINUE SEMICOLON                        
-                | BREAK SEMICOLON
-                | expression SEMICOLON                       {printf("expression match\n");}
-                | RETURN expression SEMICOLON
+                | BREAK SEMICOLON                            {printf("break match\n");}
+                | expression SEMICOLON                       
+                | RETURN expression SEMICOLON                {printf("return match\n");}
                 | SEMICOLON
-                | function_declaration
+                | function_declaration                        {printf("function declaration match\n");}
                 | variable_declaration                        {printf("variable decalration\n");}
-                | enum_declaration
+                | enum_declaration                            {printf("enum declaration match\n");}   
                 ;
 
-    block_statement: LCURLY statement_list RCURLY
-                    | LCURLY RCURLY
+    block_statement: LCURLY statement_list RCURLY           
+                    | LCURLY RCURLY                         {printf("block statement match\n");}
                     ;
 
-    statement_list:   statement
+    statement_list:   statement                             
                     | statement_list statement
                     ;   
 
-    variable_declaration: data_type variable_list SEMICOLON     
+    variable_declaration: data_type variable_list SEMICOLON      {printf("variable declaration match\n");}
                         ;
 
     variable_list: variable
                   | variable_list COMMA variable
                   ;
 
-    variable: IDENTIFIER
+    variable: IDENTIFIER                                {printf("identifier match\n");}
            | IDENTIFIER ASSIGNOP assign_expression   
            ;
 
@@ -118,15 +118,11 @@
              | enum_values COMMA IDENTIFIER ASSIGNOP literal                         
              ; 
 
-    function_declaration: function_siganture function_body
+    function_declaration: function_siganture block_statement
                         ;
 
     function_siganture: data_type IDENTIFIER LPAREN parameter_list RPAREN
                       ;
-
-
-    function_body: LCURLY block_statement RCURLY
-                ;
     
     parameter_list: VOID
                   | parameter_declaration
@@ -144,8 +140,8 @@
 
 
     
-    if_statement: matched_if_statement
-                | unmatched_if_statement
+    if_statement: matched_if_statement                                              {printf("matched if statement match\n");  }          
+                | unmatched_if_statement                                            {printf("unmatched if statement match\n");}
                 ;
 
     matched_if_statement: IF LPAREN expression RPAREN matched_if_statement ELSE matched_if_statement
@@ -156,10 +152,13 @@
                             | IF LPAREN expression RPAREN matched_if_statement ELSE unmatched_if_statement
                             ;
 
-    switch_statement: SWITCH LPAREN expression RPAREN LCURLY case_list RCURLY
+    switch_statement: SWITCH LPAREN expression RPAREN LCURLY case_list RCURLY        {printf("switch statement match\n");} 
+                    ;
                 
-    case_statement: CASE expression COLON statement_list ;
-    default_statement: DEFAULT COLON statement_list ;
+    case_statement: CASE expression COLON statement_list                            {printf("case statement match\n");}
+                ;   
+    default_statement: DEFAULT COLON statement_list                                 {printf("default statement match\n");}
+                    ;                          
 
     case_list: case_list case_statement
             | case_list default_statement
@@ -168,40 +167,40 @@
             ;
 
 
-    iteration_statement: WHILE LPAREN expression RPAREN block_statement
-                        | FOR LPAREN variable_declaration_list expression SEMICOLON expression RPAREN block_statement  
-                        | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON
+    iteration_statement: WHILE LPAREN expression RPAREN block_statement     {printf("while statement match\n");}
+                        | FOR LPAREN variable_declaration_list expression SEMICOLON expression RPAREN block_statement   {printf("for statement match\n");}
+                        | DO block_statement WHILE LPAREN expression RPAREN SEMICOLON   {printf("do while statement match\n");}
                         ;
 
     function_call_statement: IDENTIFIER LPAREN expression RPAREN SEMICOLON
                             ;
     
-    expression:  expression COMMA assign_expression
-                | assign_expression 
+    expression:  expression COMMA assign_expression           
+                | assign_expression                         {printf("expression match\n");}
                 ;
 
-    assign_expression   : IDENTIFIER ASSIGNOP assign_expression              
+    assign_expression   : IDENTIFIER ASSIGNOP assign_expression             {printf("assign_expression match\n");} 
                         | logical_or_expression
                         ;
 
-    logical_or_expression: logical_or_expression OR logical_and_expression    
-                        | logical_and_expression
+    logical_or_expression: logical_or_expression OR logical_and_expression      {printf("logical_or_expression match\n");}
+                        | logical_and_expression                     
                         ;
-    
-    logical_and_expression: logical_and_expression AND equality_expression    
+     
+    logical_and_expression: logical_and_expression AND equality_expression     {printf("logical_and_expression match\n");}
                         | equality_expression
                         ;
 
     /* == */
-    equality_expression: equality_expression EQ relational_expression    
+    equality_expression: equality_expression EQ relational_expression          {printf("equality_expression match\n");}
                         | equality_expression NE relational_expression
                         | relational_expression
                         ;
 
-    relational_expression: relational_expression LT additive_expression    
-                        | relational_expression GT additive_expression
-                        | relational_expression LE additive_expression
-                        | relational_expression GE additive_expression
+    relational_expression: relational_expression LT additive_expression         {printf("LT match\n");}
+                        | relational_expression GT additive_expression          {printf("GT match\n");}
+                        | relational_expression LE additive_expression          {printf("LE match\n");}
+                        | relational_expression GE additive_expression          {printf("GE match\n");}
                         | additive_expression
                         ;
 
@@ -210,26 +209,27 @@
                         | multiplicative_expression
                         ;
     
-    multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression  
-                                | multiplicative_expression DIVIDE prefix_expression
+    multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression    {printf("multiply match\n");}
+                                | multiplicative_expression DIVIDE prefix_expression   {printf("divide match\n");}
                                 | prefix_expression
+                                | postfix_expression
                                 ;
 
-    prefix_expression: UNARYADD prefix_expression
-                    | UNARYSUB prefix_expression
-                    | postfix_expression
+    prefix_expression: UNARYADD prefix_expression      {printf("unary add prefix match\n");}
+                    | UNARYSUB prefix_expression       {printf("unary sub prefix match\n");}
+                    | primary_expression
                     ;
     
-    postfix_expression: postfix_expression UNARYADD
-                        | postfix_expression UNARYSUB
+    postfix_expression: postfix_expression UNARYADD      {printf("unary add postfix match\n");}
+                        | postfix_expression UNARYSUB    {printf("unary sub postfix match\n");}
                         | primary_expression
                         ;
 
-    primary_expression: IDENTIFIER
+    primary_expression: IDENTIFIER                  {printf("identifier from expression match\n");}
                         | literal
 
     literal                 : FALSE                             
-                            | TRUE                             
+                            | TRUE                      {printf("true match\n");}                            
                             | INT_LITERAL                         
                             | FLOAT_LITERAL                     
                             | CHARACTER_LITERAL                                          
@@ -247,9 +247,9 @@
     }
     
     int main(void){
-       #ifdef YYDEBUG
-            yydebug = 1;
-        #endif 
+    //    #ifdef YYDEBUG
+    //         yydebug = 1;
+    //     #endif 
        FILE* input = fopen("inputfile.txt", "r"); // open input file
        if (input == NULL) {
         perror("Error opening input file");
