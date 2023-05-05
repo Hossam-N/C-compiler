@@ -1,20 +1,21 @@
 
     %{
+        
         #include<stdio.h>
         #include<string.h>
         #include<stdlib.h>
         #include<ctype.h>
-        
         void yyerror(char *s);
     %}
 
-
+    
     %union 
     {
         int intValue;
         double floatValue;
         char charValue;
-        _Bool boolValue;
+        enum { false, true } boolValue;
+        char* string;
     }
 
     /* printf and scanf*/
@@ -54,7 +55,7 @@
 
     
     /* values */
-    %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL
+    %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL <string> STRING_LITERAL
 
  
     %%     
@@ -228,7 +229,8 @@
                             | TRUE                             
                             | INT_LITERAL                       
                             | FLOAT_LITERAL                     
-                            | CHARACTER_LITERAL                                          
+                            | CHARACTER_LITERAL  
+                            | STRING_LITERAL                                        
                             ;
 
     %%

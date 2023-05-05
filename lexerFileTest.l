@@ -44,51 +44,20 @@ unary "++"|"--"|"!"
 
 "const"                     {return CONST;}
 "enum"                      {return ENUM;}
-"string"                    {return STRING}
-"int"                       { return INT; }
-"float"                     { return FLOAT; }
-"char"                      { return CHAR; }
-"void"                      { return VOID; }
-"return"                    { return RETURN; }
-/* conditional statement */
-"if"	                    { return IF; }
-"else"	                    { return ELSE; }
-"switch"                    {return SWITCH;}
-"default"                   {return DEFAULT;}
-"case"                      {return CASE;}
-^"#include"[ ]*<.+\.h>      { return INCLUDE; }
-"true"                      { return TRUE; }  // BOOLEAN VALUES
-"false"                     { return FALSE; }  // if wrong means false
-/*  loop statements */
-"for"	                    { return FOR; }
-"while"                     { return WHILE;}
-"repeat"                    {return REPEAT;}
-"until"                     {return UNTIL;}
-"do"                        {return DO;}
 
 
-{unary}                     { return UNARY; }
-"<="                        { return LE; }
-">="                        { return GE; }
-"=="                        { return EQ; }
-"!="                        { return NE; }
-">"	                    { return GT; }
-"<"	                    { return LT; }
-"&&"	                    { return AND; }
-"||"	                    { return OR; }
-"+"                         { return ADD; }
-"-"                         { return SUBTRACT; }
-"/"                         { return DIVIDE; }
-"*"                         { return MULTIPLY; }
 
 %%
 
-int yywrap() {
+int yywrap(void) {
     return 1;
 }
 
-int main(){
-    while(true)
-        yylex();
+int main(void) {
+    // int testInteger;
+    printf("Enter the commands: ");
+    // while (1){
+    //     yylex();
+    // }
     return 0;
 }
