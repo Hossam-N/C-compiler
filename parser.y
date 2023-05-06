@@ -107,8 +107,8 @@
                 | CHAR
                 | BOOL
                 | STRING
+                | VOID
                 ;  
-
 
     enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON
                     ;
@@ -122,12 +122,9 @@
     function_declaration: function_siganture block_statement
                         ;
 
-    function_siganture: function_data_type IDENTIFIER LPAREN parameter_list RPAREN
+    function_siganture: data_type IDENTIFIER LPAREN parameter_list RPAREN
                       ;
     
-    function_data_type: data_type
-                        | VOID
-                        ;
     parameter_list: 
                   | parameter_declaration
                   | parameter_declaration COMMA parameter_list
@@ -221,12 +218,11 @@
     multiplicative_expression: multiplicative_expression MULTIPLY prefix_expression    {printf("multiply match\n");}
                                 | multiplicative_expression DIVIDE prefix_expression   {printf("divide match\n");}
                                 | prefix_expression
-                                | postfix_expression
                                 ;
 
     prefix_expression: UNARYADD prefix_expression      {printf("unary add prefix match\n");}
                     | UNARYSUB prefix_expression       {printf("unary sub prefix match\n");}
-                    | primary_expression
+                    | postfix_expression
                     ;
     
     postfix_expression: postfix_expression UNARYADD      {printf("unary add postfix match\n");}
@@ -241,7 +237,7 @@
                             | TRUE                      {printf("true match\n");}                            
                             | INT_LITERAL                         
                             | FLOAT_LITERAL                     
-                            | CHARACTER_LITERAL                                          
+                            | CHARACTER_LITERAL          {printf("character literal match\n");}                          
                             ;
 
     %%

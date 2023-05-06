@@ -66,7 +66,7 @@ unary "++"|"--"
 {alpha}({alpha}|{digit}|_)*   {/*printf("print");*/ return IDENTIFIER;}  //identifier starts with any letter not symbol or digti then
 [-]?{digit}+                {/*printf("print");*/ return INT_LITERAL;} //return INTVAL; 
 [-]?{digit}+\.{digit}{1,8}  {/*printf("print");*/ return FLOAT_LITERAL;}  //PREcision of the float is 3 digits after the decimal point
-['][a-zA-z]?[']             { /*printf("print");*/ return CHARACTER_LITERAL; }
+['].?[']             { /*printf("print");*/ return CHARACTER_LITERAL; }
 
 
 
