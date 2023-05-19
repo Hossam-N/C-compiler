@@ -7,6 +7,8 @@
 
 
 %option yylineno
+%option noyywrap
+    
 
 alpha [a-zA-Z]
 digit [0-9]

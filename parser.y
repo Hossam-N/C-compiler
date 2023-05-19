@@ -7,9 +7,12 @@
         extern FILE* yyin;
         extern int yylineno;
         int yyerror(char *s);
+        int yywrap();
+        int yylex();
+        #include "print.h"
     %}
 
-    
+
 
 
     %union 
@@ -17,7 +20,7 @@
         int intValue;
         double floatValue;
         char charValue;
-        _Bool boolValue;
+        bool boolValue;
     }
 
     /* printf and scanf*/
@@ -54,6 +57,7 @@
     %token INCLUDE
 
     %token END
+
     %start program
     
     /* values */
@@ -63,7 +67,7 @@
     %%     
 
 
-    program: statement                                      {printf("entered program\n");}
+    program: statement                                      
              | program statement
              | error SEMICOLON
              ;
@@ -78,7 +82,7 @@
                 | RETURN expression SEMICOLON                {printf("return match\n");}
                 | SEMICOLON
                 | function_declaration                        {printf("function declaration match\n");}
-                | variable_declaration                        {printf("variable decalration\n");}
+                | variable_declaration                        {print();}
                 | enum_declaration                            {printf("enum declaration match\n");}   
                 ;
 
@@ -101,6 +105,7 @@
     variable: IDENTIFIER                                {printf("identifier match\n");}
            | IDENTIFIER ASSIGNOP assign_expression   
            ;
+       
 
     data_type:    INT
                 | FLOAT
@@ -108,8 +113,8 @@
                 | BOOL
                 | STRING
                 | VOID
-                ;  
-
+                ; 
+ 
     enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON
                     ;
 
@@ -124,6 +129,9 @@
 
     function_siganture: data_type IDENTIFIER LPAREN parameter_list RPAREN
                       ;
+
+    
+
     
     parameter_list: 
                   | parameter_declaration
