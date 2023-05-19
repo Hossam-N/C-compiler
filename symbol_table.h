@@ -4,19 +4,20 @@
 #include <string>  
 #include <vector> 
 #include <assert.h>
+#include "lex.yy.c"
 
 using namespace std;
 
 #define ST_ARRAY_SIZE 1
 
-enum DATA_TYPE {
+enum DATA_T {
   INVALID = -1,
-  INTEGER,
-  FLOAT,
-  CHAR,
-  BOOLEAN,
-  VOID,
-  CONST,
+  INTEGER_T,
+  FLOAT_T,
+  CHAR_T,
+  BOOLEAN_T,
+  VOID_T,
+  CONST_T,
   ENUM_TYPE
 };
 
@@ -24,14 +25,14 @@ struct TableEntry
 {
     // info about the identifier
     string name;
-    vector<enum DATA_TYPE> types;
+    vector<enum DATA_T> types;
     bool isInitialized;
     bool isUsed;
     bool isFunction;
     bool isParamater;
     bool isConstant;
 
-    enum DATA_TYPE mainType;
+    enum DATA_T mainType;
 
     struct TableEntry *next; // for chaining in block starements
 };
@@ -66,13 +67,13 @@ void destroy_table(struct SymbolTable *table);
 void destroy_global_table();
 
 // utilities 
-struct AST_Node *changeListParams(struct AST_Node *initializer_list, enum DATA_TYPE *types, bool param);
-vector <enum DATA_TYPE> insertIntoArray(enum DATA_TYPE *arr, enum DATA_TYPE type);
+struct AST_Node *changeListParams(struct AST_Node *initializer_list, enum DATA_T *types, bool param);
+vector <enum DATA_T> insertIntoArray(enum DATA_T *arr, enum DATA_T type);
 void def_func(struct TableEntry *entry);
 string getErrorMessage();
-void delete_array(enum DATA_TYPE **arr);
-void changeParams(struct TableEntry *entry, enum DATA_TYPE *types, bool func, bool init, bool param, enum DATA_TYPE main_type);
-enum DATA_TYPE verifyType(vector<enum DATA_TYPE> types);
+void delete_array(enum DATA_T **arr);
+void changeParams(struct TableEntry *entry, enum DATA_T *types, bool func, bool init, bool param, enum DATA_T main_type);
+enum DATA_T verifyType(vector<enum DATA_T> types);
 struct TableEntry *searchEntry(struct TableEntry *node, char *identifier);
 struct TableEntry *searchTables(struct SymbolTable *table, char *identifier);
 

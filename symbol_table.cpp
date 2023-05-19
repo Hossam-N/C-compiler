@@ -58,7 +58,7 @@ struct TableEntry *insert(string identifier, bool is_const, bool is_init, bool i
 
     struct TableEntry *entry = (TableEntry*)malloc(sizeof(*entry));
     assert(entry != NULL);
-    vector<enum DATA_TYPE> t;
+    vector<enum DATA_T> t;
     entry->name = identifier;
     entry->next = head;
     entry->types = t;
@@ -157,7 +157,7 @@ string getErrorMessage()
     }
 }
 
-vector <enum DATA_TYPE> insertIntoArray(vector <enum DATA_TYPE> arr, enum DATA_TYPE type)
+vector <enum DATA_T> insertIntoArray(vector <enum DATA_T> arr, enum DATA_T type)
 {
     arr.push_back(type);
     return arr;
