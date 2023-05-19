@@ -7,17 +7,21 @@
         extern FILE* yyin;
         extern int yylineno;
         int yyerror(char *s);
+        int yylex();
+        extern char* yytext;
+        extern int yyleng;
+        #include "ast.h"
     %}
 
-    
 
+     
 
     %union 
     {
         int intValue;
         double floatValue;
         char charValue;
-        _Bool boolValue;
+        bool boolValue;
     }
 
     /* printf and scanf*/
@@ -251,24 +255,7 @@
         return 1;
     }
     
-    int main(void){
-    //    #ifdef YYDEBUG
-    //         yydebug = 1;
-    //     #endif 
-       FILE* input = fopen("inputfile.txt", "r"); // open input file
-       if (input == NULL) {
-        perror("Error opening input file");
-        return 1;
-       }
-
-       yyin = input; // use input file as input stream
-
-       yyparse(); // parse the input
-
-       fclose(input); // close the input file
-
-       return 0;
-    }
+    
    
 
 

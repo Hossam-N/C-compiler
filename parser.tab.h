@@ -103,12 +103,12 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 16 "parser.y"
+#line 20 "parser.y"
 
         int intValue;
         double floatValue;
         char charValue;
-        _Bool boolValue;
+        bool boolValue;
     
 
 
