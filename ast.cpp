@@ -6,7 +6,7 @@ int main(){
 
 
 
- enum TYPE get_type(AST_Node* node)
+ enum DATA_T get_type(AST_Node* node)
 {
     if (node == NULL)
         return INVALID;
@@ -17,17 +17,17 @@ int main(){
     case NODE_TYPE_IDENTIFIER:
         //return node->identifier->main_type;
     case NODE_TYPE_INT:
-        return INT_TYPE;
+        return INTEGER_T;
     case NODE_TYPE_FLOAT:
-        return FLOAT_TYPE;
+        return FLOAT_T;
     case NODE_TYPE_CHAR:
-        return CHAR_TYPE;
+        return CHAR_T;
     case NODE_TYPE_STRING:
-        return VOID_TYPE;
+        return VOID_T;
     case NODE_TYPE_BOOL:
-        return BOOL_TYPE;
+        return BOOLEAN_T;
     default:
-        return VOID_TYPE;
+        return VOID_T;
     }
 }
 
@@ -68,17 +68,17 @@ struct AST_Node* string_node(char* value)
 }
 
 
-bool compatible(enum TYPE type1, enum TYPE type2)
+bool compatible(enum DATA_T type1, enum DATA_T type2)
 {
     // removed invalid types 
-    return ((type1 == type2) || (type1 == INVALID) || (type2 == INVALID)) && (type1 != VOID_TYPE);
+    return ((type1 == type2) || (type1 == INVALID) || (type2 == INVALID)) && (type1 != VOID_T);
 }
 
 AST_Node* operation_node(enum OPERATION op,  AST_Node* left,  AST_Node* right)
 {
 
-    enum TYPE left_type = get_type(left);   // types in symbol table
-    enum TYPE right_type = get_type(right);
+    enum DATA_T left_type = get_type(left);   // types in symbol table
+    enum DATA_T right_type = get_type(right);
     //cout << left_type << right_type;
     if (compatible(left_type, right_type) == 0)
     {
@@ -156,7 +156,7 @@ AST_Node* if_node(AST_Node* condition, AST_Node* then_branch, AST_Node* else_bra
       struct AST_Node* node = new AST_Node();
       node->tag = NODE_TYPE_FOR;
       node->ifStruct.condition = condition;
-      node->ifStruct.then_branch = add_statement(body->tag == NODE_TYPE_STATEMENTS ? body : blockNode(body), loop);
+      node->ifStruct.then_branch = add_statement(body->tag == NODE_TYPE_STATEMENTS ? body : block_node(body), loop);
       node->ifStruct.initialization = initialization;
       return node;
   }

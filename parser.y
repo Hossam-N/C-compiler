@@ -68,7 +68,7 @@
 
 
     program: statement                                      
-             | program statement
+             | program statement   
              | error SEMICOLON
              ;
 

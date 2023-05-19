@@ -4,10 +4,14 @@
 
 extern int yyerror (const char*format, ...);
 extern int yylineno;
-extern FILE *error_file;
+FILE *error_file;
 
 struct SymbolTable *current_scope = NULL;
 enum SEMANTIC_ERROR semantic_error = NO_ERROR;
+
+int main(){
+    return 0;
+}
 
 struct TableEntry *searchEntry(struct TableEntry *node, string identifier)
 {

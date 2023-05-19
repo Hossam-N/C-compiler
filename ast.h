@@ -1,40 +1,41 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "symbol_table.h"
 using namespace std;
 
 
 ////////////////////////   TOBE DELETED
- enum TYPE
-{
-    INVALID = -1,
-    BOOL_TYPE,
-    CHAR_TYPE,
-    DOUBLE_TYPE,
-    FLOAT_TYPE,
-    INT_TYPE,
-    LONG_TYPE,
-    SHORT_TYPE,
-    SIGNED_TYPE,
-    STRING_TYPE,
-    UNSIGNED_TYPE,
-    VOID_TYPE,
-    ENUM_TYPE,
-    CONST_TYPE
-} ;
+//  enum TYPE
+// {
+//     INVALID = -1,
+//     BOOL_TYPE,
+//     CHAR_TYPE,
+//     DOUBLE_TYPE,
+//     FLOAT_TYPE,
+//     INT_TYPE,
+//     LONG_TYPE,
+//     SHORT_TYPE,
+//     SIGNED_TYPE,
+//     STRING_TYPE,
+//     UNSIGNED_TYPE,
+//     VOID_TYPE,
+//     ENUM_TYPE,
+//     CONST_TYPE
+// } ;
 
-typedef enum 
-{
-    NO_ERROR,
-    USED_IDENTIFIER,
-    UNDECLARED_IDENTIFIER,
-    UNINITIALIZED_IDENTIFIER,
-    NOT_A_FUNCTION,
-    IS_A_FUNCTION,
-    INVALID_TYPE,
-    UNDEFINED_FUNCTION,
-    INCOMPATIBLE_TYPES
-} SEMANTIC_ERROR;
+// typedef enum 
+// {
+//     NO_ERROR,
+//     USED_IDENTIFIER,
+//     UNDECLARED_IDENTIFIER,
+//     UNINITIALIZED_IDENTIFIER,
+//     NOT_A_FUNCTION,
+//     IS_A_FUNCTION,
+//     INVALID_TYPE,
+//     UNDEFINED_FUNCTION,
+//     INCOMPATIBLE_TYPES
+// } SEMANTIC_ERROR;
 ///////////////////////////////////////////////////////////////////////
 
  enum OPERATION    // nOT IN THIS FILE
