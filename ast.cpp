@@ -10,6 +10,7 @@ AST_Node* root = NULL;
 
  enum DATA_T get_type(AST_Node* node)
 {
+    cout<<"node "<<node<<endl;
     if (node == NULL)
         return INVALID;
     switch (node->tag)
@@ -17,7 +18,8 @@ AST_Node* root = NULL;
     case NODE_TYPE_OPERATION:
         return get_type(node->opNode.left);
     case NODE_TYPE_IDENTIFIER:
-        //return node->identifier->main_type;
+        cout<<"hello";
+        return node->identifier->mainType;
     case NODE_TYPE_INT:
         return INTEGER_T;
     case NODE_TYPE_FLOAT:
@@ -37,8 +39,8 @@ AST_Node* root = NULL;
 
 
 AST_Node* int_node(int value) {
+    cout<<"inttttttt";
 	AST_Node* ast = new AST_Node();
-
 	ast->intValue = value;
 	ast->tag = NODE_TYPE_INT;
 	return ast;
@@ -78,10 +80,15 @@ bool compatible(enum DATA_T type1, enum DATA_T type2)
 
 AST_Node* operation_node(enum OPERATION op,  AST_Node* left,  AST_Node* right)
 {
-
+    cout<<"operatttt"<<endl;
+    cout<<left<<"gdbdbd"<<endl;
+    cout<<right<<endl;
     enum DATA_T left_type = get_type(left);   // types in symbol table
+    cout<<"first left";
+    cout << left_type <<endl;
     enum DATA_T right_type = get_type(right);
-    //cout << left_type << right_type;
+    cout<<"first right";
+    cout << right_type <<endl;
     if (compatible(left_type, right_type) == 0)
     {
         //semantic_error = INCOMPATIBLE_TYPES;

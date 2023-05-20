@@ -22,9 +22,9 @@ unary "++"|"--"
 "scanf"                     {  /*printf("print");*/ return SCANF;}  //scan input
 "enum"                      { /*printf("print");*/ return ENUM;}
 "string"                    {/*printf("print");*/ return STRING;}
-"int"                       { /*printf("print");*/ return INT;}
-"float"                     { /*printf("print");*/ return FLOAT; }
-"char"                      { /*printf("print");*/ return CHAR; }
+"int"                       {  return INT;}
+"float"                     {   return FLOAT; }
+"char"                      {   return CHAR; }
 "void"                      { /*printf("print");*/ return VOID; }
 "const"                     { /*printf("print");*/ return CONST; }
 "return"                    { /*printf("print");*/ return RETURN; }
@@ -67,10 +67,13 @@ unary "++"|"--"
 ","                             {/*printf("print");*/ return COMMA;}
 "="                             {/*printf("print");*/ return ASSIGNOP;}
 
-{alpha}({alpha}|{digit}|_)*   {/*printf("print");*/ return IDENTIFIER;}  //identifier starts with any letter not symbol or digti then
-[-]?{digit}+                {/*printf("print");*/ return INT_LITERAL;} //return INTVAL; 
-[-]?{digit}+\.{digit}{1,8}  {/*printf("print");*/ return FLOAT_LITERAL;}  //PREcision of the float is 3 digits after the decimal point
-['].?[']             { /*printf("print");*/ return CHARACTER_LITERAL; }
+
+
+{alpha}({alpha}|{digit}|_)*   {yylval.stringValue = strdup(yytext);
+                                return IDENTIFIER;}  //identifier starts with any letter not symbol or digti then
+[-]?{digit}+                { yylval.intValue = atoi(yytext); return INT_LITERAL;} //return INTVAL; 
+[-]?{digit}+\.{digit}{1,8}  { yylval.floatValue = atof(yytext); return FLOAT_LITERAL;}  //PREcision of the float is 3 digits after the decimal point
+['].?[']             {  yylval.charValue = (*yytext); return CHARACTER_LITERAL; }
 
 
 

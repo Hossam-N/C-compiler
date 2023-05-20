@@ -15,7 +15,10 @@ enum SEMANTIC_ERROR semantic_error = NO_ERROR;
 // }
 unsigned int hashe(char *string)
 {
+    cout<<"dgbrbtebtwe";
+    cout<<string<<"gfntete"<<endl;
     int hash = stbds_hash_string(string, HASH_SEED);
+    cout<<hash<<endl;
     return hash % ST_ARRAY_SIZE;
 }
 
@@ -62,8 +65,9 @@ struct TableEntry *insert(char* identifier, bool is_const, bool is_init, bool is
 {
     cout<< "inserting\n";
     unsigned int id = hashe(identifier);
+    // cout<<"bgbdbdf";
     struct TableEntry *head = current_scope->entries[id];
-
+    // cout<<"bfdbebebe";
     if (searchEntry(head, identifier) != NULL)
     {
         cout<< "used identifier\n";
@@ -72,7 +76,7 @@ struct TableEntry *insert(char* identifier, bool is_const, bool is_init, bool is
     }
 
     cout<< "inserting\n";
-    struct TableEntry *entry = new TableEntry();
+    struct TableEntry *entry = (TableEntry*)malloc(sizeof(*entry));
     assert(entry != NULL);
 
     entry->name = identifier;
@@ -212,6 +216,67 @@ void destroy_table(struct SymbolTable *table)
 
     free(table);
 }
+
+void change_parameters(struct TableEntry *entry, enum DATA_T *types, bool func, bool init, bool param, enum DATA_T main_type)
+{
+    entry->types = types;
+    entry->isInitialized = init;
+    entry->isParamater = param;
+    entry->mainType = main_type;
+    // entry->isConstant = 
+    (void *)func;
+}
+
+
+// class AST_Node;
+
+AST_Node *change_list_params(AST_Node *initializer_list, enum DATA_T *types, bool param)
+{
+    // enum DATA_T main_type = (types);
+    // AST_Node *node = new AST_Node();
+    AST_Node *node = initializer_list;
+    // printf("Tag %d\n", node->tag);
+    while (node != NULL)
+    {
+        switch (node->tag)
+        {
+        case NODE_TYPE_IDENTIFIER:
+            change_parameters(node->identifier, types, 0, 0, param, types[1]);
+            return initializer_list;
+        case NODE_TYPE_OPERATION:
+            if (node->opNode.op == ASSIGN_OP)
+            {
+                // assert(node->left->tag == NODE_TYPE_IDENTIFIER);
+                change_parameters(node->opNode.left->identifier, types, 0, 1, param, types[1]);
+                return initializer_list;
+            }
+            else if (node->opNode.op == COMMA_OP)
+            {
+                if (node->opNode.right->tag == NODE_TYPE_OPERATION)
+                {
+                    // assert(node->right->op == ASSIGN_OP);
+                    // assert(node->right->left->tag == NODE_TYPE_IDENTIFIER);
+                    change_parameters(node->opNode.right->opNode.left->identifier, types, 0, 1, param, types[1]);
+                }
+                else
+                {
+                    // assert(node->right->tag == NODE_TYPE_IDENTIFIER);
+                    change_parameters(node->opNode.right->identifier, types, 0, 0, param, types[1]);
+                }
+                node = node->opNode.left;
+            }
+            else
+                printf("IDK OP %d\n", node->opNode.op);
+            break;
+        default:
+            printf("IDK NODE_TYPE %d\n", node->tag);
+            break;
+        }
+    }
+
+    return initializer_list;
+}
+
 
 void destroy_global_table()
 {

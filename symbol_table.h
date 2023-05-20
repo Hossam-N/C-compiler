@@ -6,14 +6,15 @@
 #include <vector> 
 #include <assert.h>
 //#include "lex.yy.c"
+#include "ast.h"
 #include <iostream>
 
-
+class AST_Node;
 
 using namespace std;
 
 #define ST_ARRAY_SIZE 1
-#define HASH_SEED 0
+#define HASH_SEED 1
 
 enum DATA_T {
   INVALID = -1,
@@ -72,7 +73,7 @@ void destroy_table(struct SymbolTable *table);
 void destroy_global_table();
 
 // utilities 
-struct AST_Node *changeListParams(struct AST_Node *initializer_list, enum DATA_T *types, bool param);
+AST_Node *changeListParams(AST_Node *initializer_list, enum DATA_T *types, bool param);
 vector <enum DATA_T> insertIntoArray(enum DATA_T *arr, enum DATA_T type);
 void def_func(struct TableEntry *entry);
 char* getErrorMessage();

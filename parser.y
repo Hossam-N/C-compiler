@@ -77,7 +77,7 @@
     %type<nodeP>statement
     %type<nodeP>block_statement  if_statement switch_statement iteration_statement function_call_statement 
     %type<nodeP>function_declaration function_siganture parameter_list parameter_declaration variable_declaration   
-    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression variable  
+    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression variable  literal
     
     
 
@@ -262,11 +262,11 @@
     primary_expression: IDENTIFIER                  {printf("identifier from expression match\n");}
                         | literal
 
-    literal                 : FALSE                     {             }        
-                            | TRUE                      {printf("true match\n");}                            
-                            | INT_LITERAL                         
-                            | FLOAT_LITERAL                     
-                            | CHARACTER_LITERAL          {printf("character literal match\n");}                          
+    literal                 : FALSE                           
+                            | TRUE                                              
+                            | INT_LITERAL                  { $$ = int_node($1); }  
+                            | FLOAT_LITERAL                     { $$ = float_node($1); }
+                            | CHARACTER_LITERAL          { $$ = char_node($1); }                         
                             ;
 
     %%
@@ -291,6 +291,8 @@
        }
 
        yyin = input; // use input file as input stream
+
+       scopeDown();
 
        yyparse(); // parse the input
 
