@@ -116,7 +116,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1676 of yacc.c  */
-#line 28 "parser.y"
+#line 30 "parser.y"
 
         int intValue;
         double floatValue;
@@ -124,11 +124,13 @@ typedef union YYSTYPE
         bool boolValue;
         char* stringValue;
         AST_Node* nodeP;
+        enum DATA_T* enumPointer;
+        int enumValue;
     
 
 
 /* Line 1676 of yacc.c  */
-#line 132 "parser.tab.h"
+#line 134 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

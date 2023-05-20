@@ -82,11 +82,13 @@
         int yywrap();
         int yylex();
         
+
+    
         
     
 
 /* Line 189 of yacc.c  */
-#line 90 "parser.tab.c"
+#line 92 "parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -118,7 +120,7 @@
 
 
 /* Line 209 of yacc.c  */
-#line 122 "parser.tab.c"
+#line 124 "parser.tab.c"
 
 /* Tokens.  */
 #ifndef YYTOKENTYPE
@@ -190,7 +192,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 28 "parser.y"
+#line 30 "parser.y"
 
         int intValue;
         double floatValue;
@@ -198,11 +200,13 @@ typedef union YYSTYPE
         bool boolValue;
         char* stringValue;
         AST_Node* nodeP;
+        enum DATA_T* enumPointer;
+        int enumValue;
     
 
 
 /* Line 214 of yacc.c  */
-#line 206 "parser.tab.c"
+#line 210 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -214,7 +218,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 218 "parser.tab.c"
+#line 222 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -543,17 +547,17 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    89,    89,    90,    91,    94,    95,    96,    97,    98,
-      99,   100,   101,   102,   103,   104,   105,   108,   109,   112,
-     113,   116,   117,   120,   121,   124,   125,   131,   132,   133,
-     134,   135,   136,   139,   142,   143,   144,   145,   148,   151,
-     157,   158,   159,   162,   163,   167,   168,   174,   175,   178,
-     179,   182,   183,   186,   189,   191,   194,   195,   196,   197,
-     201,   202,   203,   206,   209,   210,   213,   214,   217,   218,
-     221,   222,   225,   226,   230,   231,   232,   235,   236,   237,
-     238,   239,   242,   243,   244,   247,   248,   249,   252,   253,
-     254,   257,   258,   259,   262,   263,   265,   266,   267,   268,
-     269
+       0,    94,    94,    95,    96,    99,   100,   101,   102,   103,
+     104,   105,   106,   107,   108,   109,   110,   113,   114,   117,
+     118,   121,   122,   125,   126,   129,   130,   136,   137,   138,
+     139,   140,   141,   144,   147,   148,   149,   150,   153,   156,
+     162,   163,   164,   167,   168,   172,   173,   179,   180,   183,
+     184,   187,   188,   191,   194,   196,   199,   200,   201,   202,
+     206,   207,   208,   211,   214,   215,   218,   219,   222,   223,
+     226,   227,   230,   231,   235,   236,   237,   240,   241,   242,
+     243,   244,   247,   248,   249,   252,   253,   254,   257,   258,
+     259,   262,   263,   264,   267,   268,   270,   271,   272,   273,
+     274
 };
 #endif
 
@@ -1639,296 +1643,345 @@ yyreduce:
         case 2:
 
 /* Line 1455 of yacc.c  */
-#line 89 "parser.y"
+#line 94 "parser.y"
     {appendProgram((yyvsp[(1) - (1)].nodeP));;}
     break;
 
   case 3:
 
 /* Line 1455 of yacc.c  */
-#line 90 "parser.y"
+#line 95 "parser.y"
     {appendProgram((yyvsp[(2) - (2)].nodeP));;}
     break;
 
   case 4:
 
 /* Line 1455 of yacc.c  */
-#line 91 "parser.y"
+#line 96 "parser.y"
     {yyerror("error in program");;}
     break;
 
   case 7:
 
 /* Line 1455 of yacc.c  */
-#line 96 "parser.y"
+#line 101 "parser.y"
     {printf("itreration match\n");;}
     break;
 
   case 8:
 
 /* Line 1455 of yacc.c  */
-#line 97 "parser.y"
+#line 102 "parser.y"
     {printf("function_call_statement match\n");;}
     break;
 
   case 10:
 
 /* Line 1455 of yacc.c  */
-#line 99 "parser.y"
+#line 104 "parser.y"
     {printf("break match\n");;}
     break;
 
   case 12:
 
 /* Line 1455 of yacc.c  */
-#line 101 "parser.y"
+#line 106 "parser.y"
     {printf("return match\n");;}
     break;
 
   case 14:
 
 /* Line 1455 of yacc.c  */
-#line 103 "parser.y"
+#line 108 "parser.y"
     {printf("function declaration match\n");;}
     break;
 
   case 15:
 
 /* Line 1455 of yacc.c  */
-#line 104 "parser.y"
+#line 109 "parser.y"
     {;;}
     break;
 
   case 16:
 
 /* Line 1455 of yacc.c  */
-#line 105 "parser.y"
+#line 110 "parser.y"
     {printf("enum declaration match\n");;}
     break;
 
   case 17:
 
 /* Line 1455 of yacc.c  */
-#line 108 "parser.y"
+#line 113 "parser.y"
     {printf("block statement match\n");;}
     break;
 
   case 21:
 
 /* Line 1455 of yacc.c  */
-#line 116 "parser.y"
-    {printf("variable declaration match\n");;}
+#line 121 "parser.y"
+    {struct AST_Node *tmp = changeListParams((yyvsp[(2) - (3)].nodeP),insertIntoArray(NULL,(yyvsp[(1) - (3)].enumValue).enumValue), 0); if (tmp==NULL) YYERROR; else (yyval.nodeP) = (yyvsp[(1) - (3)].enumValue).nodeP == NULL ? tmp : operation_node(COMMA_OP, (yyvsp[(1) - (3)].enumValue).nodeP, tmp); if ((yyval.nodeP) == NULL) YYERROR;;}
     break;
 
   case 22:
 
 /* Line 1455 of yacc.c  */
-#line 117 "parser.y"
-    {printf("constant variable declaration match\n");;}
+#line 122 "parser.y"
+    {   struct AST_Node *tmp = changeListParams((yyvsp[(2) - (4)].enumValue),insertIntoArray(insertIntoArray(NULL,(yyvsp[(1) - (4)].enumPointer).enumValue), (yyvsp[(1) - (4)].enumPointer)), 0); ;}
     break;
 
   case 25:
 
 /* Line 1455 of yacc.c  */
-#line 124 "parser.y"
+#line 129 "parser.y"
     {struct TableEntry* symbol = insert((yyvsp[(1) - (1)].stringValue), 0, 0, 0, 0); if (symbol==NULL) YYERROR; else (yyval.nodeP) = identifier_node(symbol);;}
     break;
 
   case 26:
 
 /* Line 1455 of yacc.c  */
-#line 125 "parser.y"
+#line 130 "parser.y"
     { struct TableEntry* symbol = insert((yyvsp[(1) - (3)].stringValue), 0, 1, 0, 0); 
                                                           if (symbol==NULL) YYERROR; else (yyval.nodeP) = operation_node(ASSIGN_OP, identifier_node(symbol), (yyvsp[(3) - (3)].nodeP));
                                                           if ((yyval.nodeP) == NULL) YYERROR; ;}
     break;
 
+  case 27:
+
+/* Line 1455 of yacc.c  */
+#line 136 "parser.y"
+    { (yyval.enumValue) = INTEGER_T; ;}
+    break;
+
+  case 28:
+
+/* Line 1455 of yacc.c  */
+#line 137 "parser.y"
+    { (yyval.enumValue) = FLOAT_T; ;}
+    break;
+
+  case 29:
+
+/* Line 1455 of yacc.c  */
+#line 138 "parser.y"
+    { (yyval.enumValue) = CHAR_T; ;}
+    break;
+
+  case 30:
+
+/* Line 1455 of yacc.c  */
+#line 139 "parser.y"
+    { (yyval.enumValue) = BOOLEAN_T; ;}
+    break;
+
+  case 31:
+
+/* Line 1455 of yacc.c  */
+#line 140 "parser.y"
+    { ; ;}
+    break;
+
+  case 32:
+
+/* Line 1455 of yacc.c  */
+#line 141 "parser.y"
+    { (yyval.enumValue) = VOID_T; ;}
+    break;
+
+  case 33:
+
+/* Line 1455 of yacc.c  */
+#line 144 "parser.y"
+    { struct TableEntry* symbol = insert((yyvsp[(2) - (6)].stringValue), 1, 1, 0, 0); if (symbol==NULL) YYERROR; else (yyval.enumPointer) = (yyvsp[(4) - (6)].enumPointer); ;}
+    break;
+
   case 48:
 
 /* Line 1455 of yacc.c  */
-#line 175 "parser.y"
+#line 180 "parser.y"
     {printf("unmatched if statement match\n");;}
     break;
 
   case 53:
 
 /* Line 1455 of yacc.c  */
-#line 186 "parser.y"
+#line 191 "parser.y"
     {printf("switch statement match\n");;}
     break;
 
   case 54:
 
 /* Line 1455 of yacc.c  */
-#line 189 "parser.y"
+#line 194 "parser.y"
     {printf("case statement match\n");;}
     break;
 
   case 55:
 
 /* Line 1455 of yacc.c  */
-#line 191 "parser.y"
+#line 196 "parser.y"
     {printf("default statement match\n");;}
     break;
 
   case 60:
 
 /* Line 1455 of yacc.c  */
-#line 201 "parser.y"
+#line 206 "parser.y"
     {printf("while statement match\n");;}
     break;
 
   case 61:
 
 /* Line 1455 of yacc.c  */
-#line 202 "parser.y"
+#line 207 "parser.y"
     {printf("for statement match\n");;}
     break;
 
   case 62:
 
 /* Line 1455 of yacc.c  */
-#line 203 "parser.y"
+#line 208 "parser.y"
     {printf("do while statement match\n");;}
     break;
 
   case 67:
 
 /* Line 1455 of yacc.c  */
-#line 214 "parser.y"
+#line 219 "parser.y"
     {printf("expression match\n");;}
     break;
 
   case 68:
 
 /* Line 1455 of yacc.c  */
-#line 217 "parser.y"
+#line 222 "parser.y"
     {printf("assign_expression match\n");;}
     break;
 
   case 70:
 
 /* Line 1455 of yacc.c  */
-#line 221 "parser.y"
+#line 226 "parser.y"
     {printf("logical_or_expression match\n");;}
     break;
 
   case 72:
 
 /* Line 1455 of yacc.c  */
-#line 225 "parser.y"
+#line 230 "parser.y"
     {printf("logical_and_expression match\n");;}
     break;
 
   case 74:
 
 /* Line 1455 of yacc.c  */
-#line 230 "parser.y"
+#line 235 "parser.y"
     {printf("equality_expression match\n");;}
     break;
 
   case 77:
 
 /* Line 1455 of yacc.c  */
-#line 235 "parser.y"
+#line 240 "parser.y"
     {printf("LT match\n");;}
     break;
 
   case 78:
 
 /* Line 1455 of yacc.c  */
-#line 236 "parser.y"
+#line 241 "parser.y"
     {printf("GT match\n");;}
     break;
 
   case 79:
 
 /* Line 1455 of yacc.c  */
-#line 237 "parser.y"
+#line 242 "parser.y"
     {printf("LE match\n");;}
     break;
 
   case 80:
 
 /* Line 1455 of yacc.c  */
-#line 238 "parser.y"
+#line 243 "parser.y"
     {printf("GE match\n");;}
     break;
 
   case 85:
 
 /* Line 1455 of yacc.c  */
-#line 247 "parser.y"
+#line 252 "parser.y"
     {printf("multiply match\n");;}
     break;
 
   case 86:
 
 /* Line 1455 of yacc.c  */
-#line 248 "parser.y"
+#line 253 "parser.y"
     {printf("divide match\n");;}
     break;
 
   case 88:
 
 /* Line 1455 of yacc.c  */
-#line 252 "parser.y"
+#line 257 "parser.y"
     {printf("unary add prefix match\n");;}
     break;
 
   case 89:
 
 /* Line 1455 of yacc.c  */
-#line 253 "parser.y"
+#line 258 "parser.y"
     {printf("unary sub prefix match\n");;}
     break;
 
   case 91:
 
 /* Line 1455 of yacc.c  */
-#line 257 "parser.y"
+#line 262 "parser.y"
     {printf("unary add postfix match\n");;}
     break;
 
   case 92:
 
 /* Line 1455 of yacc.c  */
-#line 258 "parser.y"
+#line 263 "parser.y"
     {printf("unary sub postfix match\n");;}
     break;
 
   case 94:
 
 /* Line 1455 of yacc.c  */
-#line 262 "parser.y"
+#line 267 "parser.y"
     {printf("identifier from expression match\n");;}
     break;
 
   case 98:
 
 /* Line 1455 of yacc.c  */
-#line 267 "parser.y"
+#line 272 "parser.y"
     { (yyval.nodeP) = int_node((yyvsp[(1) - (1)].intValue)); ;}
     break;
 
   case 99:
 
 /* Line 1455 of yacc.c  */
-#line 268 "parser.y"
+#line 273 "parser.y"
     { (yyval.nodeP) = float_node((yyvsp[(1) - (1)].floatValue)); ;}
     break;
 
   case 100:
 
 /* Line 1455 of yacc.c  */
-#line 269 "parser.y"
+#line 274 "parser.y"
     { (yyval.nodeP) = char_node((yyvsp[(1) - (1)].charValue)); ;}
     break;
 
 
 
 /* Line 1455 of yacc.c  */
-#line 1932 "parser.tab.c"
+#line 1985 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2140,7 +2193,7 @@ yyreturn:
 
 
 /* Line 1675 of yacc.c  */
-#line 272 "parser.y"
+#line 277 "parser.y"
 
     int yyerror(char *s) {
         printf("syntax error on line %d: %s\n", yylineno, s);

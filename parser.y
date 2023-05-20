@@ -18,6 +18,8 @@
         int yywrap();
         int yylex();
         
+
+    
         
     %}
 
@@ -32,6 +34,8 @@
         bool boolValue;
         char* stringValue;
         AST_Node* nodeP;
+        enum DATA_T* enumPointer;
+        int enumValue;
     }
 
     /* printf and scanf*/
@@ -77,11 +81,12 @@
     %type<nodeP>statement
     %type<nodeP>block_statement  if_statement switch_statement iteration_statement function_call_statement 
     %type<nodeP>function_declaration function_siganture parameter_list parameter_declaration variable_declaration   
-    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression variable  literal
+    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression variable  literal variable_list 
     
     
+    %type <enumPointer> CONST enum_values enum_declaration
 
-
+    %type<enumValue> data_type
  
     %%     
 
@@ -113,8 +118,8 @@
                     | statement_list statement
                     ;   
 
-    variable_declaration: data_type variable_list SEMICOLON      {printf("variable declaration match\n");}
-                        | CONST data_type variable_list SEMICOLON     {printf("constant variable declaration match\n");}
+    variable_declaration: data_type variable_list SEMICOLON      {struct AST_Node *tmp = changeListParams($2,insertIntoArray(NULL,$1.enumValue), 0); if (tmp==NULL) YYERROR; else $$ = $1.nodeP == NULL ? tmp : operation_node(COMMA_OP, $1.nodeP, tmp); if ($$ == NULL) YYERROR;}
+                        | CONST data_type variable_list SEMICOLON     {   struct AST_Node *tmp = changeListParams($2,insertIntoArray(insertIntoArray(NULL,$1.enumValue), $1), 0); }
                         ;
 
     variable_list: variable
@@ -128,15 +133,15 @@
            ;
        
 
-    data_type:    INT
-                | FLOAT
-                | CHAR
-                | BOOL
-                | STRING
-                | VOID
+    data_type:    INT  { $$ = INTEGER_T; }
+                | FLOAT  { $$ = FLOAT_T; }
+                | CHAR   { $$ = CHAR_T; }
+                | BOOL    { $$ = BOOLEAN_T; }
+                | STRING  { ; }
+                | VOID    { $$ = VOID_T; }
                 ; 
  
-    enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON
+    enum_declaration: ENUM IDENTIFIER LCURLY enum_values RCURLY SEMICOLON  { struct TableEntry* symbol = insert($2, 1, 1, 0, 0); if (symbol==NULL) YYERROR; else $$ = $4; }
                     ;
 
     enum_values: IDENTIFIER
