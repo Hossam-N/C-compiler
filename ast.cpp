@@ -179,6 +179,7 @@ AST_Node* if_node(AST_Node* condition, AST_Node* then_branch, AST_Node* else_bra
 
   AST_Node *identifier_node(struct TableEntry* identifier)
 {
+    cout<<"identifier";
     AST_Node *node = new AST_Node;
     node->tag = NODE_TYPE_IDENTIFIER;
     node->identifier = identifier;
@@ -208,5 +209,6 @@ AST_Node* add_statement(AST_Node* block, AST_Node* statement)
 
 AST_Node* appendProgram(AST_Node* statement)
 {
+   cout << "append";
    return add_statement(root, statement);
 }

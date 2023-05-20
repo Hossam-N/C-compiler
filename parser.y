@@ -121,7 +121,7 @@
                   | variable_list COMMA variable
                   ;
 
-    variable: IDENTIFIER                                {printf("identifier match\n");}
+    variable: IDENTIFIER                                {struct TableEntry* symbol = insert($1, 0, 0, 0, 0); if (symbol==NULL) YYERROR; else $$ = identifier_node(symbol);}
            | IDENTIFIER ASSIGNOP assign_expression      { struct TableEntry* symbol = insert($1, 0, 1, 0, 0); 
                                                           if (symbol==NULL) YYERROR; else $$ = operation_node(ASSIGN_OP, identifier_node(symbol), $3);
                                                           if ($$ == NULL) YYERROR; }

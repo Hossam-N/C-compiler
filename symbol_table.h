@@ -3,7 +3,6 @@
 
 #include <stdio.h>
 #include <unordered_map>
-#include <string>  
 #include <vector> 
 #include <assert.h>
 //#include "lex.yy.c"
@@ -14,6 +13,7 @@
 using namespace std;
 
 #define ST_ARRAY_SIZE 1
+#define HASH_SEED 0
 
 enum DATA_T {
   INVALID = -1,
@@ -29,8 +29,8 @@ enum DATA_T {
 struct TableEntry
 {
     // info about the identifier
-    string name;
-    vector<enum DATA_T> types;
+    char* name;
+    enum DATA_T *types;
     bool isInitialized;
     bool isUsed;
     bool isFunction;
@@ -45,7 +45,7 @@ struct TableEntry
 struct SymbolTable
 {
     struct SymbolTable *parent;
-    unordered_map<string, struct TableEntry *> entries_map;
+    struct TableEntry *entries[ST_ARRAY_SIZE];
 };
 
 enum SEMANTIC_ERROR
@@ -66,8 +66,8 @@ enum SEMANTIC_ERROR
 void scopeUp();
 void scopeDown();
 struct SymbolTable *createTable();
-struct TableEntry *insert(string identifier, bool is_const, bool is_init, bool is_func, bool is_param);
-struct TableEntry *lookup(string identifier, bool func, bool need_init, bool init);
+struct TableEntry *insert(char* identifier, bool is_const, bool is_init, bool is_func, bool is_param);
+struct TableEntry *lookup(char* identifier, bool func, bool need_init, bool init);
 void destroy_table(struct SymbolTable *table);
 void destroy_global_table();
 
@@ -75,7 +75,7 @@ void destroy_global_table();
 struct AST_Node *changeListParams(struct AST_Node *initializer_list, enum DATA_T *types, bool param);
 vector <enum DATA_T> insertIntoArray(enum DATA_T *arr, enum DATA_T type);
 void def_func(struct TableEntry *entry);
-string getErrorMessage();
+char* getErrorMessage();
 void delete_array(enum DATA_T **arr);
 void changeParams(struct TableEntry *entry, enum DATA_T *types, bool func, bool init, bool param, enum DATA_T main_type);
 enum DATA_T verifyType(vector<enum DATA_T> types);

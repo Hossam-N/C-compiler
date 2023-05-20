@@ -1,6 +1,7 @@
 #include "symbol_table.h"
 
 #define STB_DS_IMPLEMENTATION
+#include "stb_ds.h"
 
 extern int yyerror (const char*format, ...);
 extern int yylineno;
@@ -12,69 +13,80 @@ enum SEMANTIC_ERROR semantic_error = NO_ERROR;
 // int main(){
 //     return 0;
 // }
-
-struct TableEntry *searchEntry(struct TableEntry *node, string identifier)
+unsigned int hashe(char *string)
 {
-    while(node != NULL){
-        if(node->name == identifier){
+    int hash = stbds_hash_string(string, HASH_SEED);
+    return hash % ST_ARRAY_SIZE;
+}
+
+struct TableEntry *searchEntry(struct TableEntry *node, char* identifier)
+{
+    cout<< "searching\n";
+      while (node != NULL)
+    {
+        cout<< "searching\n";
+        if (strcmp(node->name, identifier) == 0)
             return node;
-        }
         node = node->next;
     }
     return NULL;
 }
 
-struct TableEntry *searchTables(struct SymbolTable *table, string identifier){
+struct TableEntry *searchTables(struct SymbolTable *table, char* identifier){
 
-    struct TableEntry *entry = NULL;
-    while(table != NULL){
+  unsigned int bucket = hashe(identifier);
 
-        // check if identifier is in current scope
-        if(table->entries_map.find(identifier) != table->entries_map.end()){
-            entry = searchEntry(table->entries_map.at(identifier), identifier);
-            if(entry != NULL){
+    while (table != NULL)
+    {
+        struct TableEntry *entry = searchEntry(table->entries[bucket], identifier);
+        if (entry != NULL)
             return entry;
-            }
-        }  
         table = table->parent;
     }
+
     return NULL;
 }
 
 struct SymbolTable *createTable(){
-    struct SymbolTable *table = (struct SymbolTable *)malloc(sizeof(struct SymbolTable));
+ struct SymbolTable *table = (SymbolTable*)malloc(sizeof(*table));
+    assert(table != NULL);
+
     table->parent = NULL;
+    for (unsigned int i = 0; i < ST_ARRAY_SIZE; i++)
+        table->entries[i] = NULL;
+
     return table;
 }
 
-struct TableEntry *insert(string identifier, bool is_const, bool is_init, bool is_func, bool is_param)
+struct TableEntry *insert(char* identifier, bool is_const, bool is_init, bool is_func, bool is_param)
 {
-    struct TableEntry *head=NULL;
-    if (current_scope->entries_map.find(identifier) != current_scope->entries_map.end())
-    {
-         head = current_scope->entries_map[identifier]; 
-    }
+    cout<< "inserting\n";
+    unsigned int id = hashe(identifier);
+    struct TableEntry *head = current_scope->entries[id];
+
     if (searchEntry(head, identifier) != NULL)
     {
+        cout<< "used identifier\n";
         semantic_error = USED_IDENTIFIER;
         return NULL;
     }
 
-    struct TableEntry *entry = (TableEntry*)malloc(sizeof(*entry));
+    cout<< "inserting\n";
+    struct TableEntry *entry = new TableEntry();
     assert(entry != NULL);
-    vector<enum DATA_T> t;
+
     entry->name = identifier;
     entry->next = head;
-    entry->types = t;
+    entry->types = NULL;
     entry->isInitialized = is_init;
     entry->isUsed = 0;
     entry->isFunction = is_func;
     entry->isConstant = is_const;
-    entry->isParamater= is_param;
+    entry->isParamater = is_param;
     entry->mainType = INVALID;
-
-    current_scope->entries_map[identifier] = entry;
-
+    
+    current_scope->entries[id] = entry;
+    cout<< "no error\n";
     semantic_error = NO_ERROR;
     return entry;
 }
@@ -89,25 +101,23 @@ void scopeDown()
 void scopeUp()
 {
 
-    for (auto key : current_scope->entries_map)
+     for (unsigned int i = 0; i < ST_ARRAY_SIZE; i++)
     {
-       struct TableEntry *entry = key.second;
-       while(entry != NULL)
-       {
-           if(!(entry->isUsed)){
-            //  cout<< "Warning on line " << yylineno << ": Identifier '" << entry->name << "' declared but not used\n";
-             //fprintf(error_file, "Warning on line %d: Identifier '%s' declared but not used\n", yylineno, entry->name);
-           }
-           entry = entry->next;
-       }
+        struct TableEntry *head = current_scope->entries[i];
+        while (head != NULL)
+        {
+            struct TableEntry *next = head->next;
+            if (!(head->isUsed))
+                fprintf(error_file, "Warning on line %d: Identifier '%s' declared but not used\n", yylineno, head->name);
+            head = next;
+        }
     }
-    // scope up
-    struct SymbolTable *oldScope = current_scope;
-    current_scope = oldScope->parent;
+    struct SymbolTable *old_scope = current_scope;
+    current_scope = old_scope->parent;
 }
 
 // will be called when a function is defined or in assigning expression
-struct TableEntry *lookup(string identifier, bool func,bool need_init, bool init)
+struct TableEntry *lookup(char* identifier, bool func,bool need_init, bool init)
 {
     struct TableEntry *found = searchTables(current_scope, identifier);
     
@@ -140,7 +150,7 @@ struct TableEntry *lookup(string identifier, bool func,bool need_init, bool init
 
 
 
-string getErrorMessage()
+char* getErrorMessage()
 {
     switch (semantic_error)
     {
@@ -169,6 +179,7 @@ string getErrorMessage()
 
 vector <enum DATA_T> insertIntoArray(vector <enum DATA_T> arr, enum DATA_T type)
 {
+    cout<< "inserting into array\n";
     arr.push_back(type);
     return arr;
 }
@@ -180,19 +191,25 @@ void def_func(struct TableEntry *entry)
 }
 
 
-
+enum DATA_T *insert_into_array(enum DATA_T *arr, enum DATA_T type)
+{
+    arrput(arr, type);
+    return arr;
+}
 void destroy_table(struct SymbolTable *table)
 {
-    for (auto key : table->entries_map)
+    for (unsigned int i = 0; i < ST_ARRAY_SIZE; i++)
     {
-        struct TableEntry *head = key.second;
+        struct TableEntry *head = table->entries[i];
         while (head != NULL)
         {
             struct TableEntry *next = head->next;
+            // delete_array(&head->types);
             free(head);
             head = next;
         }
     }
+
     free(table);
 }
 
