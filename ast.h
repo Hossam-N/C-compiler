@@ -177,19 +177,19 @@ public:
 
 
 
- AST_Node* operation_node(enum OPERATION op, AST_Node* left, AST_Node* right);
- AST_Node* block_node( AST_Node* statement);
+AST_Node* operation_node(enum OPERATION op, AST_Node* left, AST_Node* right);
+AST_Node* block_node( AST_Node* statement);
  ///////////////////////////////////////////////////////
-  AST_Node* if_node( AST_Node* condition,  AST_Node* then_branch,  AST_Node* else_branch);
-  AST_Node* switch_node( AST_Node* expression,  AST_Node* cases);
-  AST_Node* while_node( AST_Node* condition,  AST_Node* body);
-  AST_Node* do_while_node( AST_Node* condition,  AST_Node* body);
-  AST_Node* add_statement( AST_Node* block,  AST_Node* statement);
-   AST_Node* for_node( AST_Node* initialization,  AST_Node* condition,  AST_Node* loop,  AST_Node* body);
-   AST_Node* try_node( AST_Node* try_block,  AST_Node* catch_block,  AST_Node* finally_block);
-   AST_Node* break_node();
-   AST_Node* continue_node();
-
+AST_Node* if_node( AST_Node* condition,  AST_Node* then_branch,  AST_Node* else_branch);
+AST_Node* switch_node( AST_Node* expression,  AST_Node* cases);
+AST_Node* while_node( AST_Node* condition,  AST_Node* body);
+AST_Node* do_while_node( AST_Node* condition,  AST_Node* body);
+AST_Node* add_statement( AST_Node* block,  AST_Node* statement);
+AST_Node* for_node( AST_Node* initialization,  AST_Node* condition,  AST_Node* loop,  AST_Node* body);
+AST_Node* try_node( AST_Node* try_block,  AST_Node* catch_block,  AST_Node* finally_block);
+AST_Node* break_node();
+AST_Node* continue_node();
+AST_Node* appendProgram(AST_Node* statement);
    
 
 #endif // AST_H

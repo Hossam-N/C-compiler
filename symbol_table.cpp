@@ -9,9 +9,9 @@ FILE *error_file;
 struct SymbolTable *current_scope = NULL;
 enum SEMANTIC_ERROR semantic_error = NO_ERROR;
 
-int main(){
-    return 0;
-}
+// int main(){
+//     return 0;
+// }
 
 struct TableEntry *searchEntry(struct TableEntry *node, string identifier)
 {
@@ -95,7 +95,7 @@ void scopeUp()
        while(entry != NULL)
        {
            if(!(entry->isUsed)){
-             cout<< "Warning on line " << yylineno << ": Identifier '" << entry->name << "' declared but not used\n";
+            //  cout<< "Warning on line " << yylineno << ": Identifier '" << entry->name << "' declared but not used\n";
              //fprintf(error_file, "Warning on line %d: Identifier '%s' declared but not used\n", yylineno, entry->name);
            }
            entry = entry->next;

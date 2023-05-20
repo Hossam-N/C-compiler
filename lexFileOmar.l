@@ -1,5 +1,7 @@
 %{
     //#include "y.tab.h"
+    #include "ast.h"
+    #include "symbol_table.h"
     #include "parser.tab.h"
     #include <stdio.h>
     int countn=0;

@@ -6,8 +6,9 @@
 #include <string>  
 #include <vector> 
 #include <assert.h>
-#include "lex.yy.c"
+//#include "lex.yy.c"
 #include <iostream>
+
 
 
 using namespace std;

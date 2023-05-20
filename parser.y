@@ -1,10 +1,13 @@
     %code requires {
         #include "ast.h"
+        #include <string>
         #include "symbol_table.h"
-    %}
+    }
 
 
     %{
+        #include "symbol_table.h"
+        #include "ast.h"
         #include<stdio.h>
         #include<string.h>
         #include<stdlib.h>
@@ -14,10 +17,8 @@
         int yyerror(char *s);
         int yywrap();
         int yylex();
-        #include "print.h"
-        #include "symbol_table.h"
-        #include "ast.h"
-        #include <string>
+        
+        
     %}
 
 
@@ -29,8 +30,8 @@
         double floatValue;
         char charValue;
         bool boolValue;
-        string stringValue;
-        AST_Node *nodeP;
+        char* stringValue;
+        AST_Node* nodeP;
     }
 
     /* printf and scanf*/
@@ -76,7 +77,7 @@
     %type<nodeP>statement
     %type<nodeP>block_statement  if_statement switch_statement iteration_statement function_call_statement 
     %type<nodeP>function_declaration function_siganture parameter_list parameter_declaration variable_declaration   
-    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression   
+    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression variable  
     
     
 
@@ -100,7 +101,7 @@
                 | RETURN expression SEMICOLON                {printf("return match\n");}
                 | SEMICOLON
                 | function_declaration                        {printf("function declaration match\n");}
-                | variable_declaration                        {print();}
+                | variable_declaration                        {;}
                 | enum_declaration                            {printf("enum declaration match\n");}   
                 ;
 
