@@ -1,3 +1,8 @@
+    %code requires {
+        #include "ast.h"
+        #include "symbol_table.h"
+    %}
+
 
     %{
         #include<stdio.h>
@@ -10,6 +15,9 @@
         int yywrap();
         int yylex();
         #include "print.h"
+        #include "symbol_table.h"
+        #include "ast.h"
+        #include <string>
     %}
 
 
@@ -21,6 +29,8 @@
         double floatValue;
         char charValue;
         bool boolValue;
+        string stringValue;
+        AST_Node *nodeP;
     }
 
     /* printf and scanf*/
@@ -62,17 +72,25 @@
     
     /* values */
     %token <boolValue>FALSE <boolValue>TRUE <intValue>INT_LITERAL <floatValue>FLOAT_LITERAL <charValue>CHARACTER_LITERAL 
+    %type<stringValue>IDENTIFIER
+    %type<nodeP>statement
+    %type<nodeP>block_statement  if_statement switch_statement iteration_statement function_call_statement 
+    %type<nodeP>function_declaration function_siganture parameter_list parameter_declaration variable_declaration   
+    %type<nodeP>expression assign_expression logical_or_expression logical_and_expression equality_expression relational_expression additive_expression multiplicative_expression prefix_expression postfix_expression primary_expression   
+    
+    
+
 
  
     %%     
 
 
-    program: statement                                      
-             | program statement   
-             | error SEMICOLON
+    program: statement                                          {appendProgram($1);}  
+             | program statement                                {appendProgram($2);}  
+             | error SEMICOLON                                  {yyerror("error in program");}
              ;
 
-    statement:    if_statement                            
+    statement:   if_statement                              
                 | switch_statement                             
                 | iteration_statement                       {printf("itreration match\n");} 
                 | function_call_statement                   {printf("function_call_statement match\n");}
@@ -103,7 +121,9 @@
                   ;
 
     variable: IDENTIFIER                                {printf("identifier match\n");}
-           | IDENTIFIER ASSIGNOP assign_expression   
+           | IDENTIFIER ASSIGNOP assign_expression      { struct TableEntry* symbol = insert($1, 0, 1, 0, 0); 
+                                                          if (symbol==NULL) YYERROR; else $$ = operation_node(ASSIGN_OP, identifier_node(symbol), $3);
+                                                          if ($$ == NULL) YYERROR; }
            ;
        
 
@@ -241,7 +261,7 @@
     primary_expression: IDENTIFIER                  {printf("identifier from expression match\n");}
                         | literal
 
-    literal                 : FALSE                             
+    literal                 : FALSE                     {             }        
                             | TRUE                      {printf("true match\n");}                            
                             | INT_LITERAL                         
                             | FLOAT_LITERAL                     

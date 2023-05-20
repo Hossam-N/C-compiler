@@ -1,4 +1,6 @@
-#pragma once
+#ifndef AST_H
+#define AST_H
+
 #include <iostream>
 #include <vector>
 #include "symbol_table.h"
@@ -148,7 +150,7 @@ public:
     // Node operation parameters
 
 
-    //struct symbolTableEntry* identifier;
+    struct TableEntry* identifier;
 
     void printAst() {
         //cout << endl << this->intValue<<endl;
@@ -171,6 +173,7 @@ public:
  AST_Node* char_node(char value);
  AST_Node* string_node(char* value);
  AST_Node* bool_node(bool value);
+ AST_Node* identifier_node(struct TableEntry* identifier);
 
 
 
@@ -187,9 +190,8 @@ public:
    AST_Node* break_node();
    AST_Node* continue_node();
 
+   
 
-
-
-
+#endif // AST_H
 
 

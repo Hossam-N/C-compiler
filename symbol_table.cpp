@@ -95,7 +95,8 @@ void scopeUp()
        while(entry != NULL)
        {
            if(!(entry->isUsed)){
-             fprintf(error_file, "Warning on line %d: Identifier '%s' declared but not used\n", yylineno, entry->name);
+             cout<< "Warning on line " << yylineno << ": Identifier '" << entry->name << "' declared but not used\n";
+             //fprintf(error_file, "Warning on line %d: Identifier '%s' declared but not used\n", yylineno, entry->name);
            }
            entry = entry->next;
        }
@@ -112,7 +113,11 @@ struct TableEntry *lookup(string identifier, bool func,bool need_init, bool init
     
     
     if (found == NULL)
+    {
         semantic_error = UNDECLARED_IDENTIFIER;
+        cout<< "undeclared identifier\n";
+    }
+        
     else if (found->isFunction == 0 && func == 1)
         semantic_error = NOT_A_FUNCTION;
     else if (found->isFunction == 1 && func == 0)
@@ -126,6 +131,7 @@ struct TableEntry *lookup(string identifier, bool func,bool need_init, bool init
         // printf("lookup: %s\n, need init: %d, init: %d, is_init: %d\n", identifier, need_init, init, found->is_init);
         found->isUsed = 1;
         found->isInitialized |= init;
+        cout<< "Tmam"; 
         // printf("lookup: %s\n, need init: %d, init: %d, is_init: %d\n", identifier, need_init, init, found->is_init);
         return found;
     }

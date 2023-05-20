@@ -1,4 +1,5 @@
-
+#ifndef SYMBOL_TABLE_H
+#define SYMBOL_TABLE_H
 
 #include <stdio.h>
 #include <unordered_map>
@@ -6,6 +7,8 @@
 #include <vector> 
 #include <assert.h>
 #include "lex.yy.c"
+#include <iostream>
+
 
 using namespace std;
 
@@ -80,4 +83,5 @@ struct TableEntry *searchTables(struct SymbolTable *table, char *identifier);
 
 
 
+#endif // SYMBOL_TABLE_H
 

@@ -1,8 +1,10 @@
 #include "ast.h"
 
-int main(){
-    return 0;
-};
+// int main(){
+//     return 0;
+// };
+
+AST_Node* root = NULL;
 
 
 
@@ -175,6 +177,14 @@ AST_Node* if_node(AST_Node* condition, AST_Node* then_branch, AST_Node* else_bra
       return node;
   }
 
+  AST_Node *identifier_node(struct TableEntry* identifier)
+{
+    AST_Node *node = new AST_Node;
+    node->tag = NODE_TYPE_IDENTIFIER;
+    node->identifier = identifier;
+    return node;
+}
+
 
 //
 //
@@ -194,4 +204,9 @@ AST_Node* add_statement(AST_Node* block, AST_Node* statement)
         block->statementStruct.statements.push_back(statement);
     }
     return block;
+}
+
+AST_Node* appendProgram(AST_Node* statement)
+{
+   return add_statement(root, statement);
 }
